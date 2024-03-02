@@ -18,12 +18,13 @@ end
 
 
 --[[
-    Format a number to a specified number of decimal places, with an optional leading zero and thousands separator
-    args:
+    Format a number to a specified number of decimal places, with optional leading zero, thousands separator, and dot after integer.
+    args: A table with the following keys:
         num: The number to be formatted
         numDecimalPlaces: The number of decimal places to round to
-        [includeLeadingZero]: (Optional) Whether to include a leading zero for numbers less than 1. Default is false.
-        [useThousandsSeparator]: (Optional) Whether to include a thousands separator. Default is false.
+        includeLeadingZero: (Optional) Whether to include a leading zero for numbers less than 1. Default is false.
+        useThousandsSeparator: (Optional) Whether to include a thousands separator. Default is false.
+        includeDotAfterInt: (Optional) Whether to include a dot after the integer part if the number is a whole number. Default is false.
     returns:
         The formatted number as a string
 ]]
