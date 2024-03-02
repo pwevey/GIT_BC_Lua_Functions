@@ -44,7 +44,7 @@ To use these lua functions, do the following:
 
 Two main ways:
 
-1: Place the following variable in a Post Block:
+1: Place the following function call in a Post Block:
     
 No Parameters: 
 ```
