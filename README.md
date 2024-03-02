@@ -32,7 +32,7 @@ To use these lua functions, do the following:
 
     LATHE: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe
 
-    MillTurn: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\MillTurn
+    MILLTURN: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\MillTurn
 
     eg. create a folder called, "BC_Lua_Functions" 
 
