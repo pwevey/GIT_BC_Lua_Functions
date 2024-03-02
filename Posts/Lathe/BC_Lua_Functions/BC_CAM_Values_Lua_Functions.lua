@@ -5,11 +5,77 @@
 
 --[[
     Round a number to a specified number of decimal places
+    args:
+        num: The number to be rounded
+        numDecimalPlaces: The number of decimal places to round to
+    returns:
+        The rounded number
 ]]
 function round(num, numDecimalPlaces)
     local mult = 10^(numDecimalPlaces or 0)
     return math.floor(num * mult + 0.5) / mult
 end
+
+
+--[[
+    Format a number to a specified number of decimal places, with an optional leading zero and thousands separator
+    args:
+        num: The number to be formatted
+        numDecimalPlaces: The number of decimal places to round to
+        [includeLeadingZero]: (Optional) Whether to include a leading zero for numbers less than 1. Default is false.
+        [useThousandsSeparator]: (Optional) Whether to include a thousands separator. Default is false.
+    returns:
+        The formatted number as a string
+]]
+function formatNumber(num, numDecimalPlaces, includeLeadingZero, useThousandsSeparator)
+    -- Provide default values for optional parameters
+    includeLeadingZero = includeLeadingZero or false
+    useThousandsSeparator = useThousandsSeparator or false
+
+    -- Round to the specified number of decimal places
+    local mult = 10^(numDecimalPlaces or 0)
+    num = math.floor(num * mult + 0.5) / mult
+
+    -- Convert to string to manipulate as string
+    local numStr = tostring(num)
+
+    -- Add leading zero if necessary
+    if includeLeadingZero and num < 1 then
+        numStr = '0' .. numStr
+    end
+
+    -- Add thousands separator if necessary
+    if useThousandsSeparator then
+        local beforeDecimal, afterDecimal = numStr:match("([^.]*)%.?(.*)")
+        beforeDecimal = beforeDecimal:reverse():gsub("(%d%d%d)", "%1,"):reverse()
+        numStr = beforeDecimal .. (afterDecimal ~= "" and "." .. afterDecimal or "")
+    end
+
+    return numStr
+end
+--[[
+-- Scenario 1: Format a number with 2 decimal places, include leading zero, and use thousands separator
+print(formatNumber(1234.5678, 2, true, true))  -- Outputs: 1,234.57
+
+-- Scenario 2: Format a number with no decimal places, include leading zero, and use thousands separator
+print(formatNumber(1234.5678, 0, true, true))  -- Outputs: 1,235
+
+-- Scenario 3: Format a number with 2 decimal places, do not include leading zero, and use thousands separator
+print(formatNumber(1234.5678, 2, false, true))  -- Outputs: 1,234.57
+
+-- Scenario 4: Format a number with 2 decimal places, include leading zero, and do not use thousands separator
+print(formatNumber(1234.5678, 2, true, false))  -- Outputs: 1234.57
+
+-- Scenario 5: Format a number with 3 decimal places, include leading zero, and use thousands separator
+print(formatNumber(1234.5678, 3, true, true))  -- Outputs: 1,234.568
+
+-- Scenario 6: Format a fractional number with 2 decimal places, include leading zero, and use thousands separator
+print(formatNumber(0.5678, 2, true, true))  -- Outputs: 0.57
+
+-- Scenario 7: Round a number only
+print(formatNumber(1234.5678, 1))  -- Outputs: 1,234.568
+]]
+
 
 
 --[[
@@ -22,13 +88,13 @@ end
 
 --[[
     Convert a pitch value to threads per inch for the Lathe Thread operation
-    Parameters:
+    args:
         prefix: The prefix to be used in the threads per inch value
     Returns:
         The threads per inch value rounded to the nearest whole number
     Set in Post Processor:
         Use lua_func_ThreadsPerInch("prefix")
-        prefix: The prefix to be used for the threads per inch value
+        Or, call ThreadsPerInch(prefix) in Lua Blocks (2701 - 2799)
     Used for Post Blocks:
         1087 (Start of thread (G76) cycle)
 ]]
