@@ -52,12 +52,13 @@ To use these lua functions, do the following:
     2: Call the functions directly in a Lua Block
     Lua Blocks: 2701 (lua_block_1) through 2799 (lua_block_2)
 
-    2701. Lua Block 1.
-        -- This is an extrenal lua function that come from the file BC_Lua_Functions.lua
-        -- in the posts folder here: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions 
-        ShowOperationData()
+    2701\. Lua Block 1.
+    ```lua
+    -- This is an external lua function that come from the file BC_Lua_Functions.lua
+    -- in the posts folder here: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions 
+    ShowOperationData()
 
-        local pitch = GetValue("thread_pitch")
+    local pitch = GetValue("thread_pitch")
 
 
 
