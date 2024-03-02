@@ -22,11 +22,11 @@ display data from the software such as data from any operation.
 
 To use these lua functions, do the following:
 
-1\. Navigate to the link below to Enable to IsEnableLuaPlugin DWord Reg Key:
+1. Navigate to the link below to Enable to IsEnableLuaPlugin DWord Reg Key:
 
     [Registry Key to Enable](https://bobcad.com/components/webhelp/BC_Lua/RegistryKeytoEnable.html)
 
-2\. Make a folder in one of the following directories to store the lua files
+2. Make a folder in one of the following directories to store the lua files
 
     MILL: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Mill
 
@@ -36,11 +36,11 @@ To use these lua functions, do the following:
 
     eg. create a folder called, "BC_Lua_Functions" 
 
-3\. Add the following Post Question to your Post Processor and use the name of the folder you just created
+3. Add the following Post Question to your Post Processor and use the name of the folder you just created
 
     732\. Lua sub folder? "BC_Lua_Functions" 
 
-4\. You can now use the lua functions through out the Post Processor. 
+4. You can now use the lua functions through out the Post Processor. 
 
 Two main ways:
 
