@@ -55,8 +55,8 @@ Parameters:
 lua_func_FuncionName(argument1, argument2)
 ```
 
-    2: Call the functions directly in a Lua Block
-    Lua Blocks: 2701 (lua_block_1) through 2799 (lua_block_2)
+2: Call the functions directly in a Lua Block
+Lua Blocks: 2701 (lua_block_1) through 2799 (lua_block_2)
 
 
 2701\. Lua Block 1.
