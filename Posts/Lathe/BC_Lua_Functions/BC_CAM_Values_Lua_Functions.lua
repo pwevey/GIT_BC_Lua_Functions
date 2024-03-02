@@ -90,6 +90,33 @@ print(formatNumber({num = 24, numDecimalPlaces = 0, includeDotAfterInt = true}))
 ]]
 
 
+--[[
+    Convert an angle between degrees and radians.
+    args:
+        angle: The angle to be converted
+        mode: The conversion mode. Can be "degreesToRadians" or "radiansToDegrees".
+    returns:
+        The converted angle
+
+]]
+function convertAngle(angle, mode)
+    local pi = math.pi
+    if mode == "degreesToRadians" then
+        return angle * (pi / 180)
+    elseif mode == "radiansToDegrees" then
+        return angle * (180 / pi)
+    else
+        error("Invalid mode: " .. mode)
+    end
+end
+--[[
+local radians = convertAngle(180, "degreesToRadians")  -- Outputs: 3.1415926535898 (which is pi)
+print(radians)
+local degrees = convertAngle(radians, "radiansToDegrees")  -- Outputs: 180
+print(degrees)
+]]
+
+
 
 --[[
     Lua functions used in the post processor
