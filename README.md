@@ -29,9 +29,7 @@ To use these lua functions, do the following:
 2. Make a folder in one of the following directories to store the lua files
 
     MILL: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Mill
-
     LATHE: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe
-
     MillTurn: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\MillTurn
 
     eg. create a folder called, "BC_Lua_Functions" 
