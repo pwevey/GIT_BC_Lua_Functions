@@ -102,8 +102,10 @@ print(formatNumber({num = 24, numDecimalPlaces = 0, includeDotAfterInt = true}))
 function convertAngle(angle, mode)
     local pi = math.pi
     if mode == "degreesToRadians" then
+        -- Bcc.ShowMessageBox("Angle in Radians: " .. angle * (pi / 180))
         return angle * (pi / 180)
     elseif mode == "radiansToDegrees" then
+        -- Bcc.ShowMessageBox("Angle in Radians: " .. angle * (180 / pi))
         return angle * (180 / pi)
     else
         error("Invalid mode: " .. mode)
