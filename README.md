@@ -45,11 +45,9 @@ To use these lua functions, do the following:
     Two main ways:
 
     1: Place the following variable in a Post Block:
-    No Parameters:
-    lua_func_FuncionName
-
-    Parameters:
-    lua_func_FuncionName(argument1, argument2)
+    
+        No Parameters: lua_func_FuncionName
+        Parameters: lua_func_FuncionName(argument1, argument2)
 
     2: Call the functions directly in a Lua Block
     Lua Blocks: 2701 (lua_block_1) through 2799 (lua_block_2)
