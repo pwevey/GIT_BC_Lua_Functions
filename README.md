@@ -31,7 +31,7 @@ To use these lua functions, do the following:
     MILL: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Mill
 
     LATHE: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe
-    
+
     MillTurn: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\MillTurn
 
     eg. create a folder called, "BC_Lua_Functions" 
@@ -71,6 +71,6 @@ local pitch = GetValue("thread_pitch")
 
 
 
-Navigate here for moe info:
+Navigate here for more info:
 [Post Processing with Lua](https://bobcad.com/components/webhelp/BC_Lua/PostProcessing.html)
 
