@@ -42,9 +42,9 @@ To use these lua functions, do the following:
 
 4. You can now use the lua functions through out the Post Processor. 
 
-    Two main ways:
+Two main ways:
 
-    1: Place the following variable in a Post Block:
+1: Place the following variable in a Post Block:
     
 No Parameters: 
 ```
