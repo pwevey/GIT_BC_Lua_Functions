@@ -38,7 +38,7 @@ To use these lua functions, do the following:
 
 3. Add the following Post Question to your Post Processor and use the name of the folder you just created
 
-732. Lua sub folder? "BC_Lua_Functions" 
+    732\. Lua sub folder? "BC_Lua_Functions" 
 
 4. You can now use the lua functions through out the Post Processor. 
 
