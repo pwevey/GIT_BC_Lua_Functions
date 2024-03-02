@@ -7,10 +7,10 @@ The scripts are written in Lua and are organized based on the machine type.
 
 The repository is organized into the following directories:
 
-- [General](Posts/General)
-- [Lathe](Posts/Lathe)
-- [Mill](Posts/Mill)
-- [MillTurn](Posts/MillTurn)
+- [General](Posts/General/BC_Lua_Functions/)
+- [Lathe](Posts/Lathe/BC_Lua_Functions/)
+- [Mill](Posts/Mill/BC_Lua_Functions/)
+- [MillTurn](Posts/MillTurn/BC_Lua_Functions/)
 
 ## Key Files
 
