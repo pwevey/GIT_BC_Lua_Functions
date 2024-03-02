@@ -61,6 +61,9 @@ function formatNumber(args)
         numStr = numStr .. "."
     end
 
+    -- Show the formatted number in a message box
+    -- Bcc.ShowMessageBox(numStr)
+
     return numStr
 end
 --[[
