@@ -27,10 +27,14 @@ end
     returns:
         The formatted number as a string
 ]]
-function formatNumber(num, numDecimalPlaces, includeLeadingZero, useThousandsSeparator)
+function formatNumber(args)
     -- Provide default values for optional parameters
-    includeLeadingZero = includeLeadingZero or false
-    useThousandsSeparator = useThousandsSeparator or false
+    local num = args.num
+    local numDecimalPlaces = args.numDecimalPlaces or 0
+    local includeLeadingZero = args.includeLeadingZero or false
+    local useThousandsSeparator = args.useThousandsSeparator or false
+    local includeDotAfterInt = args.includeDotAfterInt or false
+
 
     -- Round to the specified number of decimal places
     local mult = 10^(numDecimalPlaces or 0)
@@ -39,9 +43,9 @@ function formatNumber(num, numDecimalPlaces, includeLeadingZero, useThousandsSep
     -- Convert to string to manipulate as string
     local numStr = tostring(num)
 
-    -- Add leading zero if necessary
-    if includeLeadingZero and num < 1 then
-        numStr = '0' .. numStr
+    -- Remove leading zero if necessary
+    if not includeLeadingZero and num > 0 and num < 1 then
+        numStr = numStr:sub(2)
     end
 
     -- Add thousands separator if necessary
@@ -51,29 +55,34 @@ function formatNumber(num, numDecimalPlaces, includeLeadingZero, useThousandsSep
         numStr = beforeDecimal .. (afterDecimal ~= "" and "." .. afterDecimal or "")
     end
 
+    -- Add dot after integer if necessary
+    if includeDotAfterInt and num == math.floor(num) then
+        numStr = numStr .. "."
+    end
+
     return numStr
 end
 --[[
 -- Scenario 1: Format a number with 2 decimal places, include leading zero, and use thousands separator
-print(formatNumber(1234.5678, 2, true, true))  -- Outputs: 1,234.57
+print(formatNumber({num = 1234.5678, numDecimalPlaces = 2, includeLeadingZero = true, useThousandsSeparator = true}))  -- Outputs: 1,234.57
 
 -- Scenario 2: Format a number with no decimal places, include leading zero, and use thousands separator
-print(formatNumber(1234.5678, 0, true, true))  -- Outputs: 1,235
+print(formatNumber({num = 1234.5678, numDecimalPlaces = 0, includeLeadingZero = true, useThousandsSeparator = true}))  -- Outputs: 1,235
 
--- Scenario 3: Format a number with 2 decimal places, do not include leading zero, and use thousands separator
-print(formatNumber(1234.5678, 2, false, true))  -- Outputs: 1,234.57
+-- Scenario 3: Format a number with 2 decimal places, include leading zero, and do not use thousands separator
+print(formatNumber({num = 1234.5678, numDecimalPlaces = 2, includeLeadingZero = true, useThousandsSeparator = false}))  -- Outputs: 1234.57
 
--- Scenario 4: Format a number with 2 decimal places, include leading zero, and do not use thousands separator
-print(formatNumber(1234.5678, 2, true, false))  -- Outputs: 1234.57
+-- Scenario 5: Format a fractional number with 2 decimal places, include leading zero, and use thousands separator
+print(formatNumber({num = 0.5678, numDecimalPlaces = 2, includeLeadingZero = true, useThousandsSeparator = true}))  -- Outputs: 0.57
 
--- Scenario 5: Format a number with 3 decimal places, include leading zero, and use thousands separator
-print(formatNumber(1234.5678, 3, true, true))  -- Outputs: 1,234.568
-
--- Scenario 6: Format a fractional number with 2 decimal places, include leading zero, and use thousands separator
-print(formatNumber(0.5678, 2, true, true))  -- Outputs: 0.57
+-- Scenario 6: Format a number with 3 decimal places, do not include leading zero, and use thousands separator
+print(formatNumber({num = 0.5678, numDecimalPlaces = 3, includeLeadingZero = false, useThousandsSeparator = true}))  -- Outputs: .568
 
 -- Scenario 7: Round a number only
-print(formatNumber(1234.5678, 1))  -- Outputs: 1,234.568
+print(formatNumber({num = 1234.5678, numDecimalPlaces = 1}))  -- Outputs: 1234.6
+
+-- Scenario 8: Include a dot after the integer
+print(formatNumber({num = 24, numDecimalPlaces = 0, includeDotAfterInt = true}))  -- Outputs: 24.
 ]]
 
 
