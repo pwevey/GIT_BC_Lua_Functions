@@ -24,20 +24,17 @@ To use these lua functions, do the following:
 
 1. Navigate to the link below to Enable to IsEnableLuaPlugin DWord Reg Key:
 
-[Registry Key to Enable](https://bobcad.com/components/webhelp/BC_Lua/RegistryKeytoEnable.html)
+    [Registry Key to Enable](https://bobcad.com/components/webhelp/BC_Lua/RegistryKeytoEnable.html)
 
 2. Make a folder in one of the following directories to store the lua files
 
-MILL:
-C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Mill
+    MILL: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Mill
 
-LATHE:
-C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe
+    LATHE: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe
 
-MillTurn:
-C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\MillTurn
+    MillTurn: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\MillTurn
 
-eg. create a folder called, "BC_Lua_Functions" 
+    eg. create a folder called, "BC_Lua_Functions" 
 
 3. Add the following Post Question to your Post Processor and use the name of the folder you just created
 
@@ -45,23 +42,24 @@ eg. create a folder called, "BC_Lua_Functions"
 
 4. You can now use the lua functions through out the Post Processor. 
 
-Two main ways:
-1: Place the following variable in a Post Block:
-No Parameters:
-lua_func_FuncionName
+    Two main ways:
 
-Parameters:
-lua_func_FuncionName(argument1, argument2)
+    1: Place the following variable in a Post Block:
+    No Parameters:
+    lua_func_FuncionName
 
-2: Call the functions directly in a Lua Block
-Lua Blocks: 2701 (lua_block_1) through 2799 (lua_block_2)
+    Parameters:
+    lua_func_FuncionName(argument1, argument2)
 
-2701. Lua Block 1.
-	-- This is an extrenal lua function that come from the file BC_Lua_Functions.lua
-	-- in the posts folder here: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions 
-	ShowOperationData()
+    2: Call the functions directly in a Lua Block
+    Lua Blocks: 2701 (lua_block_1) through 2799 (lua_block_2)
 
-	local pitch = GetValue("thread_pitch")
+    2701. Lua Block 1.
+        -- This is an extrenal lua function that come from the file BC_Lua_Functions.lua
+        -- in the posts folder here: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions 
+        ShowOperationData()
+
+        local pitch = GetValue("thread_pitch")
 
 
 
