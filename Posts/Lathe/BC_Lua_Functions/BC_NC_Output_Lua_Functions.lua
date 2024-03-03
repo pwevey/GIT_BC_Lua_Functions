@@ -30,6 +30,7 @@ end
     args: A table with the following keys:
         num: (required) The number to be formatted
         numDecimalPlaces: The number of decimal places to round to. Default is round to nearest whole number.
+        multiplier: (Optional) A multiplier to be applied to the number before formatting. Default is 1.
         includeLeadingZero: (Optional) Whether to include a leading zero for numbers less than 1. Default is true.
         useThousandsSeparator: (Optional) Whether to include a thousands separator. Default is false.
         includeDotAfterInt: (Optional) Whether to include a dot after the integer part if the number is a whole number. Default is true.
@@ -57,6 +58,7 @@ function formatNumber(args)
 
     local numDecimalPlaces = args.numDecimalPlaces or 0
     local useThousandsSeparator = args.useThousandsSeparator or false
+    local multiplier = args.multiplier or 1
 
     local includeDotAfterInt = args.includeDotAfterInt
     if includeDotAfterInt == nil then includeDotAfterInt = true end
@@ -64,6 +66,8 @@ function formatNumber(args)
     local includeLeadingZero = args.includeLeadingZero
     if includeLeadingZero == nil then includeLeadingZero = true end
 
+    -- Apply the multiplier
+    num = num * multiplier
 
     -- Round to the specified number of decimal places
     local mult = 10^(numDecimalPlaces or 0)
