@@ -47,6 +47,8 @@ end
     Example:
         In a post block: (If X Rapid plane is 2.25 (radius))
         lua_func_formatNumber({num = "MILL_GetXRapid", numDecimalPlaces = 1 , includeDotAfterInt = false, multiply = 100, prefix = "X"}) // Outputs: X225
+    Dependencies:
+        This function does NOT depend on other lua functions in this file
 ]]
 function formatNumber(args)
     -- Check if num parameter is provided
