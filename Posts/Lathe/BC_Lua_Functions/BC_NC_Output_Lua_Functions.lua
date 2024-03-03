@@ -151,9 +151,9 @@ print(degrees)
 ]]
 function GetValueFromOperation(searchKey)
     local op_id = BcPost.GetValueOfOperation("ID")
-    local retTable = Bcc.GetCamObjParameters(op_id)
+    local ret_table = Bcc.GetCamObjParameters(op_id)
 
-    for key, value in pairs(retTable) do
+    for key, value in pairs(ret_table) do
         if key == searchKey then
             return value
         end
@@ -233,9 +233,9 @@ end
         1025 (Arc move (Lathe))
 ]]
 function RadiusIArcMoveBlock1025()
-    ArcIvalue = "I" .. round(BcPost.RunVBApi("LATHE_GetArcCenterX"), 4)
-	ArcKvalue = "K" .. round(BcPost.RunVBApi("LATHE_GetArcCenterZ"), 4)
+    local arc_i_value = "I" .. round(BcPost.RunVBApi("LATHE_GetArcCenterX"), 4)
+	local arc_k_value = "K" .. round(BcPost.RunVBApi("LATHE_GetArcCenterZ"), 4)
 	-- Bcc.ShowMessageBox("ArcIvalue: " .. ArcIvalue ..  "\nArcKvalue: " .. ArcKvalue, {Title="Arc Center Values"})
 
-	BcPost.ProcessPostLine("n,g_arc_move,x_f,z_f,'"..ArcIvalue.."','"..ArcKvalue.."',feed_rate")
+	BcPost.ProcessPostLine("n,g_arc_move,x_f,z_f,'"..arc_i_value.."','"..arc_k_value.."',feed_rate")
 end
