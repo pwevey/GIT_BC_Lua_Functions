@@ -21,7 +21,11 @@
 ]]
 function round(num, numDecimalPlaces)
     local mult = 10^(numDecimalPlaces or 0)
-    return math.floor(num * mult + 0.5) / mult
+    if num >= 0 then
+        return math.floor(num * mult + 0.5) / mult
+    else
+        return math.ceil(num * mult - 0.5) / mult
+    end
 end
 
 
@@ -40,6 +44,9 @@ end
         prefix: (Optional) A prefix to be added to the formatted number. (Primarily used for BobCAD API functions)
     returns:
         The formatted number as a string
+    Example:
+        In a post block: (If X Rapid plane is 2.25 (radius))
+        lua_func_formatNumber({num = "MILL_GetXRapid", numDecimalPlaces = 1 , includeDotAfterInt = false, multiply = 100, prefix = "X"}) // Outputs: X225
 ]]
 function formatNumber(args)
     -- Check if num parameter is provided
@@ -199,20 +206,27 @@ print(formatNumber({includeDotAfterInt = false})) -- Outputs: Error, no num para
     args:
         angle: The angle to be converted
         mode: The conversion mode. Can be "degreesToRadians" or "radiansToDegrees".
+        numDecimalPlaces: (Optional) The number of decimal places to round to. Default is no rounding.
     returns:
         The converted angle
 
 ]]
-function convertAngle(angle, mode)
+function convertAngle(angle, mode, numDecimalPlaces)
     local pi = math.pi
+    local result
     if mode == "degreesToRadians" then
-        -- Bcc.ShowMessageBox("Angle in Radians: " .. angle * (pi / 180))
-        return angle * (pi / 180)
+        result = angle * (pi / 180)
     elseif mode == "radiansToDegrees" then
-        -- Bcc.ShowMessageBox("Angle in Radians: " .. angle * (180 / pi))
-        return angle * (180 / pi)
+        result = angle * (180 / pi)
     else
         error("Invalid mode: " .. mode)
+    end
+
+    if numDecimalPlaces then
+        local mult = 10.0 ^ numDecimalPlaces
+        return math.floor(result * mult + 0.5) / mult
+    else
+        return result
     end
 end
 --[[
@@ -220,7 +234,12 @@ local radians = convertAngle(180, "degreesToRadians")  -- Outputs: 3.14159265358
 print(radians)
 local degrees = convertAngle(radians, "radiansToDegrees")  -- Outputs: 180
 print(degrees)
+local radians = convertAngle(180, "degreesToRadians", 3)  -- Outputs: 3.142 (which is pi)
+print(radians)
+local degrees = convertAngle(radians, "radiansToDegrees", 4)  -- Outputs: 180
+print(degrees)
 ]]
+
 
 --[[
     Include a dot after the integer numbers
