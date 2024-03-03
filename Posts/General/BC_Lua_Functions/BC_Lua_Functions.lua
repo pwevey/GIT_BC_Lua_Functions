@@ -3,6 +3,9 @@
     This function retrieves the current operations ID value of the Operation in the CAM Tree,
     iterates through the returned table and displays the key-value pairs in a message box.
     Use ShowValueFromOperation function to extract the key or subkey you need to use
+    
+    functions in camelCase are general functions
+    functions in PascalCase contain BobCAD Lua API functions
 ]]
 function ShowOperationData()
     -- Get the current operations ID value in the CAM Tree
