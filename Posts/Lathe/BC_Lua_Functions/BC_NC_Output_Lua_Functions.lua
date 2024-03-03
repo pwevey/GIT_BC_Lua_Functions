@@ -86,7 +86,7 @@ function formatNumber(args)
         numStr = numStr:sub(2)
     end
 
-        -- If the number is 0 after rounding, set numStr to "0" directly
+    -- If the number is 0 after rounding, set numStr to "0" directly
     if num == 0 then
         numStr = "0"
     else
@@ -299,7 +299,7 @@ function ThreadsPerInch(prefix)
     if pitch then
         -- Bcc.ShowMessageBox(searchKey .. ": " .. tostring(pitch), {Title="Value from Toolpath Operation"})
     else
-        Bcc.ShowMessageBox("Key or subkey not found. This function is meant for a lathe thread operation.", {Title="Error"})
+        Bcc.ShowMessageBox("Key or subkey not found. This function is meant for a lathe thread operation.", {Title="ThreadsPerInch(prefix) Function Error"})
     end
 
 
