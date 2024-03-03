@@ -1,0 +1,917 @@
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//---BobCAD-CAM Turn Post Processor ----------------------------
+//---------------------------------------------------------------------
+//--Initial Software Version: BobCAD-CAM V6
+//--Initial Creation Date: 2-17-17
+//--Author: BobCAD-CAM
+//--Machine: Single_Line
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//--REVISION LOG ----------------------------------------------------
+//---03/16/2017 - included predator header in the file header block
+//---
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//--SPECIAL NOTES ABOUT THIS POST AND MACHINE -----------------------
+//---------------------------------------------------------------------
+//---
+//---
+//---------------------------------------------------------------------
+
+****Version Number MONTH DAY YEAR****
+1000. Version Information = Version Month Day Year? "11.0 12 12 2016"
+
+0. File Header
+	comment_start,"JOBSETUP[",prog_name_no_ext_no_path, force_no_add_spaces,".mwjs]JOBSETUP",comment_end
+	default_add_spaces
+	"O",prog_n
+	user_comment_1
+	user_comment_2
+	user_comment_3
+	user_comment_4
+	user_comment_5
+	user_comment_6
+	user_comment_7
+	user_comment_8
+	user_comment_9
+	user_comment_10
+	user_comment_11
+	user_comment_12
+	user_comment_13
+	user_comment_14
+	user_comment_15
+	"(Job Note Section -----------)"
+	output_note
+	
+
+1002. Start of program with turning cycles
+	lua_func_ShowOperationData
+	lua_func_GetValueFromOperation("use_tool_number")
+	lua_func_formatNumber({num = 24, numDecimalPlaces = 0, includeDotAfterInt = true})
+	lua_func_convertAngle(180, "degreesToRadians")
+	comment1
+	start_comment,comment2,end_comment
+	"(Operation Note Section -----------)"
+	output_note
+	n,"G40 G99", work_plane,measure_mode,absolute_coord
+	output_first_stock_feed
+	MDI_BeforeToolChange
+	n,t
+	n,spindle_gear
+	n,"G50",smax
+	n,spsp_code,s,spindle_on
+	n,coolant_on
+	MDI_AfterToolChange
+	n,rapid_move,xr,zr
+
+1003. Tool change for turning cycles
+	" "
+	comment1
+	start_comment,comment2,end_comment
+	"(Operation Note Section -----------)"
+	output_note	
+	MDI_BeforeToolChange	
+	n,t
+	n,spindle_gear
+	n,"G50",smax
+	n,spsp_code,s,spindle_on
+	n,coolant_on
+	MDI_AfterToolChange	
+	n,initialize_gcode,rapid_move,rapid_move,xr,zr
+
+1004. Next operation same tool turning
+	" "
+	comment1
+	start_comment,comment2,end_comment
+	"(Operation Note Section -----------)"
+	output_note	
+	MDI_BeforeToolChange	
+	n,spindle_gear
+	n,"G50",smax
+	n,spsp_code,s,spindle_on
+	n,coolant_on
+	MDI_AfterToolChange	
+	n,initialize_gcode,rapid_move,xr,zr
+
+5. End of turning cycles
+	n,"M05"
+	n,"M30"
+
+//This block is only called if using v10.0 or lower
+//Post version 11.0 will not call this block
+1006. Next operation same tool facing
+	" "
+	comment1
+	start_comment,comment2,end_comment
+	n,spindle_gear
+	n,"G50",smax
+	n,spsp_code,s,spindle_on
+	n,coolant_on
+	n,initialize_gcode,rapid_move,xr,zr
+
+11. Cancel cutter compensation
+	"G40"
+
+12. Cutter compensation left
+	"G41"
+
+13. Cutter compensation right
+	"G42"
+
+14. Tool length compensation
+	"G43"
+
+15. First Machine Setup
+	"(Setup Note Section -----------)"
+	output_note
+
+   
+1020. Rapid move
+	n,rapid_move,xr,zr
+
+1021. Feed move
+	n,cc,feed_move,x_f,z_f,feed_rate
+
+1022. Dwell
+	n,"G04",drill_dwell
+
+24. File trailer
+
+1025. Arc move
+	// lua_block_2
+	// n,g_arc_move,x_f,z_f,arc_center,feed_rate
+	lua_func_RadiusIArcMoveBlock1025
+
+26. Set debug
+	debug_on
+	
+1026. Auto cancel cutter compensation after last feed move.
+
+27. Mill - First Rapid Move Z 
+	//used for drilling longhand code
+    n, rapid_move, zr
+
+1027. Rigid tapping start
+	n,"G95"
+
+1028. Rigid tapping end
+	n,"G94"
+
+50. Mill - Line rapid move Z - Z retract 
+	//used for drilling longhand code
+    n, rapid_move, zr
+   
+51. Mill - Line feed move Z 
+	//used for drilling longhand code
+    n, feed_move, feed_mode, z_f, feed_rate
+   
+54. Mill - Line rapid move XYZ 
+	//used for drilling longhand code
+    n, rapid_move, xr, zr
+
+1058. Output before any cutting cycle
+	  
+1059. Output after any cutting cycle
+
+	
+1060. Auto finish cycle for G71,G72,G73 for turning
+	n,"G70",cc,n_first_finish,n_last_finish,finish_feed
+	
+1062. Start of rough (G71) turning cycle
+	n,"G71",cc,n_first_rough,n_last_rough,rough_cycle_rough_x_allowance,rough_cycle_rough_z_allowance,rough_cycle_finish_x_allowance,rough_cycle_finish_z_allowance,rough_depth_of_cut_with_decimal,rough_feed
+
+1063. End of rough (G71) turning cycle
+		
+1064. End of Rough Turning Separate Move
+
+1066. Start of rough (G72) facing cycle
+	n,"G72",cc,n_first_rough,n_last_rough,rough_cycle_rough_x_allowance,rough_cycle_rough_z_allowance,rough_cycle_finish_x_allowance,rough_cycle_finish_z_allowance,rough_depth_of_cut_with_decimal,rough_feed
+
+1067. End of rough (G72) facing cycle
+
+1068. End of Rough Face Separate Moves
+
+1070. Start of finish (G73) turning cycle
+	n,"G73",cc,n_first_rough,n_last_rough,finish_x_spring_pass_stock_radius,finish_z_spring_pass_stock_radius,rough_cycle_rough_x_allowance,rough_cycle_rough_z_allowance,rough_cycle_finish_x_allowance,rough_cycle_finish_z_allowance,finish_number_of_cuts,rough_feed
+
+1071. End of finish G73) turning cycle
+
+1074. Start of groove (G75) turning cycle
+	n,"G75",cc,groove_x_bottom,groove_z_bottom,groove_peck_increment,groove_depth_of_cut,groove_retract_amount,rough_feed
+
+1075. End of groove (G75) turning cycle
+
+1078. Start of groove (G74) facing cycle
+	n,"G74",cc,groove_x_bottom,groove_z_bottom,groove_peck_increment,groove_depth_of_cut,groove_retract_amount,rough_feed
+
+1079. End of groove (G74) facing cycle
+
+1080. End of Groove Facing  Separate Move
+
+1082. Start of Drill Facing Cycle
+
+1084. End of drill separate moves cycle
+
+1086. Start of threading cycles
+
+1087. Start of thread (G76) cycle
+	// lua_block_1
+	n,'G76',thread_x2,thread_z2,taper_height,thread_first_cut,thread_angle_in
+	lua_func_ThreadsPerInch("U")
+1088. End of thread (G76) cycle
+
+1089. Start of thread (G33) cycle
+
+1090. End of thread (G33) cycle
+
+1091. End of threading cycles.
+
+1092. G32 line move
+	n,thread_g33_gcode,thread_g33_xmove,thread_g33_zmove,thread_g33_feedrate
+
+1093. G32 thread cut move
+	n,thread_g33_gcode,thread_g33_xmove,thread_g33_zmove,thread_g33_feedrate
+
+1094. G32 Separate Moves InFeed Block for Tapping Cycle
+	n,tap_feed_mode
+	n,tap_g32_gcode,tap_g32_final_z,tap_feed,spindle_off
+
+1095. G32 Separate Moves OutFeed Block for Tapping Cycle
+	n,tap_g32_gcode,tap_g32_initial_z,tap_feed,spindle_on
+
+1100. Start of cutoff cycle
+
+1101. End of cutoff cycle
+
+1105. End of auto finish no canned cycle
+
+1108. Start of auto stock feed cycle
+	n,stock_feed_t,"(BAR PULLER)"
+	n,"M05","(MAKE SURE THE SPINDLE IS OFF)"
+	n,"G98","(FEED PER MINUTE BECAUSE SPINDLE IS OFF)"
+	n,rapid_to_position_z,"(RAPID INITIAL Z POSITION)"
+	n,rapid_to_position_x,"(RAPID INITIAL X POSITION)"
+	n,feed_move,stock_from_x,stock_feedrate,"(X CLAMP LOCATION AT FEED)"
+	n,"M10","(CHUCK OPEN)"
+	n,feed_move,stock_to_z,"(PULL THE STOCK OUT)"
+	n,"M11","(CHUCK CLOSED)"
+	n,feed_move,init_stock_x,"(BACK TO INITIAL X)"
+	n,rapid_move,stock_xh,"(RAPID TO SAFE X)"
+	n,rapid_move,stock_zh,"(RAPID TO SAFE Z)"
+
+1109. End of auto stock feed cycle
+	n,"G99","(SWITCH BACK TO FEED PER REV)"
+	n,"M01"
+
+1110. Tool list format
+	"(LTOOL",t,ltool_home,"S",ltool_type,"O",ltool_cutting_angle,"I",ltool_ic,"A",ltool_angle,"C",ltool_corner_rad,"H",ltool_height,"D",ltool_diam,"N",ltool_orientation,")"
+
+1111. Stock definition
+	"(SCYLS3X0Y0Z",z_end_of_stock,"D",stock_diameter,"L",stock_length,")"
+	"(HCYLS3X0Y0Z",z_end_of_stock,"D",stock_internal_diameter,"L",stock_length,")"
+
+1120. Drill canned cycle cancel
+	n,cancel_drill_cycle
+	rigid_tapping_end
+
+1121. High speed peck drill canned cycle
+	rigid_tapping_start
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+1122. Left handed tapping canned cycle
+	rigid_tapping_start
+	n,tap_feed_mode
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,tap_feed
+
+1123. Fine boring canned cycle
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+1124. Standard drill canned cycle
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,canned_feed_rate
+
+1125. Standard drill canned cycle with dwell
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,dwell,canned_feed_rate
+
+1126. Peck drill canned cycle
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+1127. Tapping canned cycle
+	rigid_tapping_start
+	n,tap_feed_mode
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,tap_feed
+
+1128. Boring cycle #1 canned cycle
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,canned_feed_rate
+
+1129. Boring cycle #2 canned cycle
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,canned_feed_rate
+
+1130. Back boring cycle canned cycle
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+1131. Boring cycle #1 canned cycle with dwell
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,dwell,canned_feed_rate
+
+1132. Boring cycle #2 canned cycle with dwell
+	n,g_canned_cycle,x_f,drill_depth,reference_plane,dwell,canned_feed_rate
+
+1197. End of operation - Toolchange	
+   n, coolant_off
+   MDI_AfterOperation
+   
+1198. End of operation - No Toolchange
+	MDI_AfterOperation
+	
+1199. End of last operation
+	n,coolant_off
+	MDI_AfterOperation
+	
+200. Is X modal? y
+202. Is Z modal? y
+203. Are the g codes modal? n
+204. Are the g codes (G02 and G03) modal in arc milling? y
+205. Are the xy (or yz or xz) coordinates modal in arc milling? n
+208. Output sequence numbers? y
+209. Number of places for sequence numbers? 1
+210. Delete the decimal point? n
+211. Delete leading zeros? y
+212. Delete trailing zeros? y
+213. Unit output (S=System, FE=Force English, FM=Force Metric)? S
+214. Places before decimal point for reals? 1
+215. Number of places for G and M codes? 1
+216. Places after decimal for feedrate ? 3
+217. Scale factor for feedrate ? 1
+218. Number of places for program number? 4
+219. Add spaces to the program? y
+
+221. Break arcs into quadrants? n
+222. Arc center a=absolute, b=incremental, d=unsigned inc., e=radius? b
+223. Break arcs into two pieces if greater than 180 degrees? n
+228. Support Unicode Output? n
+229. Allow coolant on off codes to be output on a single line? n
+
+239. Output 0 dwell value? y
+240. Amount to add to t to obtain t1? 0
+241. Amount to add to t to obtain t2? 0
+242. Value of t1 at t = 0? 0
+243. Value of t2 at t = 0? 0
+
+1247. Sign of X Spindle 1 (p = pos, n = neg, e = either, r = reverse)? e
+1248. Sign of X Spindle 2 (p = pos, n = neg, e = either, r = reverse)? e
+1249. Output X as a diameter or radius (d/r) (deprecated in 11.0, please use block 6005)? d
+
+1250. Use canned cycle for drilling? y
+1251. Use canned cycle for peck drilling? y
+1252. Use canned cycle for chip break? y
+1253. Use canned cycle for tap? y
+1254. Use canned cycle for bore #1? y
+1255. Use canned cycle for bore #2? y
+1256. Use back boring cycle canned cycle? y
+1257. Use left hand tap cycle canned cycle? y
+
+1258. Use two line canned cycle format? n
+1259. Depth format (d = default, t = trailing)? t
+
+262. Add Sign to All Coordinate Values? n
+
+1268. Use fine boring cycle canned cycle? y
+1269. Rigid tapping? y
+
+1280. Rough Cycle Rough Allowance - Use Sign? y
+1281. Rough Cycle Finish Allowance - Use Sign? y
+
+1283. Output rough allowance if no allowance is chosen? n
+1284. Output peck amount if no pecking is chosen? y
+
+1305. Tap Feed Mode (0=UPM 1=UPR)? 1
+1306. Reverse Tap Spindle Direction? n
+1307. Feedrate mode for Lathe hole operations other than Lathe Tap Operation (0=UPM 1=UPR)? 1
+
+319. Break arcs with radius larger than? 0.01
+320. Arc segment breaking tolerance? 0.0001
+321. Line segment max length? 999.99
+
+1411. R value (Retract amount) for first line of 2 line rough cycle? 0.1
+1412. R value (Retract amount) for first line of 2 line groove cycle? 0.1
+1413. R value (Thread mach allowance) 2 line G76 cycle? 0.001
+
+414. Number of decimal places real numbers metric ? 3
+415. Number of decimal places real numbers inch ? 4
+425. Number of decimal places angles ? 3
+426. Places before decimal point for angles? 1
+
+1512. Tool number format (1=n, 2=n*101, 3=100*n+toffset, 4=toofset, 5=n*100)? 3
+1513. Number of digits for tool number? 4
+
+515. Output G99 instead of G98 in drilling? y
+516. Output G98/G99 in drilling? y
+
+1517. Medium gear1 spindle speed? 901
+1518. Medium gear2 spindle speed? 10000
+1519. Medium gear3 spindle speed? 10000
+1520. Medium gear4 spindle speed? 10000
+1521. Medium gear5 spindle speed? 10000
+1522. Medium gear6 spindle speed? 10000
+1523. Medium gear7 spindle speed? 10000
+1524. Medium gear8 spindle speed? 10000
+1525. Medium gear9 spindle speed? 10000
+1526. High gear spindle speed? 10000
+
+535. Are Feed Rates modal? y
+536. Force all codes to upper case ? y
+540. Check each output line with scripting? n
+
+1544. Auto output cancel offset (G40)(0=no, 1=On last feed move, 2=after last feed move)? 1
+
+550. Break arc segments into lines? n
+551. Break line segments into smaller lines? n
+557. Drill Cycle Reference Plane Type? 0  //(0 = absolute, 1 = signed incremental, 2 = unsigned incremental)
+558. Allow nested Comment? n
+559. Nested comment replacement string? "-"
+
+1612. Reverse G2 and G3? n
+1613. Reverse the sign of I? n
+1614. Reverse the sign of K? n
+1615. Reverse the sign of Thread taper height (R)? n
+
+
+605. Symbol for Spindle Speed ? "S"
+609. Prefix for maximum spindle speed? "S"
+
+614. Inch mode machining? "G20"
+615. Metric mode machining? "G21"
+620. Absolute coordinates? "G90"
+621. Incremental coordinates? "G91"
+622. Coordinate zero set? "G92"
+625. End of file? "M02"
+626. Stop? "M00"
+627. Optional Stop? "M01"
+628. Subprogram call? "M98"
+629. Subprogram return? "M99"
+630. Begin comment character? "( "
+631. End comment character? ")"
+639. Cancel wire offset? "G40"
+640. Prefix for arc Z center? "K"
+641. Prefix for radius values? "R"
+642. Prefix for arc X center? "I"
+646. Machine Maker? ""
+647. Machine Model? ""
+649. Reference Plane Prefix? "R"
+650. Comp left? "G41"
+651. Comp right? "G42"
+652. Machine Coordinate Mode? "G53"
+653. Machine Home Code? "G53"
+654. Tool Change Code? "M06"
+655. G-Code for Dwell? "G04P"
+
+656. Block delete? "/"
+659. Add these characters to the end of each line? ""
+
+670. Spindle forward String ? "M03"
+671. Spindle reverse String ? "M04"
+672. Spindle off String ? "M05"
+
+673. Coolant on String ? "M08"
+674. Coolant off String ? "M09"
+
+679. Canned cycle cancel? "G80"
+
+680. GCode for Rapid Move? "G00"
+681. GCode for Feed Move? "G01"
+682. GCode for Arc CW? "G02"
+683. GCode for Arc CCW? "G03"
+
+684. Prefix for X Move? "X"
+685. Prefix for Y Move? "Y"
+686. Prefix for Z Move? "Z"
+
+688. Prefix for Tool Length Offset? "H"
+
+1705. Symbol for lead? "F"
+1706. Symbol for IPR feedrate? "F"
+1707. Symbol for IPM feedrate? "F"
+1708. Symbol for UPR feedrate (thread_g33_feedrate)? "F"
+
+706. Coolant Mist code? "M07"
+707. Coolant Air code? "M07"
+708. Coolant Oil code? "M07"
+
+715. Feed Unit Per Minute Code? "G98"
+729. Feed Unit Per Revolution Code? "G99"
+
+732. Lua sub folder? "BC_Lua_Functions"
+
+840. Coolant 1 ON code? "M08"
+841. Coolant 2 ON code? "M07"
+842. Coolant 3 ON code? "M83"
+843. Coolant 4 ON code? "M88"
+844. Coolant 5 ON code? "M31"
+845. Coolant 6 ON code? ""
+846. Coolant 7 ON code? ""
+847. Coolant 8 ON code? ""
+848. Coolant 9 ON code? ""
+849. Coolant 10 ON code? ""
+
+850. Coolant 1 OFF code? "M09"
+851. Coolant 2 OFF code? "M84"
+852. Coolant 3 OFF code? "M89"
+853. Coolant 4 OFF code? "M33"
+854. Coolant 5 OFF code? ""
+855. Coolant 6 OFF code? ""
+856. Coolant 7 OFF code? ""
+857. Coolant 8 OFF code? ""
+858. Coolant 9 OFF code? ""
+859. Coolant 10 OFF code? ""
+
+1712. Threading chamfer out start code? "M23"
+1713. Threading chamfer out end code? "M24"
+
+727. Retract to initial position? "G98"
+728. Retract to R Plane? "G99"
+
+1765. Tap Canned Right Hand Code? "G84"
+1766. Tap Canned Left Hand Code? "G184"
+
+1767. Prefix for tap feed IPM? "F"
+1768. Prefix for tap feed IPR? "F"
+
+1780. Symbol for Spindle Speed ? "S"
+1781. Symbol for Tool Number Prefix ? "T"
+
+1785. Symbol for CSS spindle speed? "G96"
+1786. Symbol for RPM spindle speed? "G97"
+
+1790. Prefix for canned cycle start line Number? "P"
+1791. Prefix for canned cycle end line Number? "Q"
+
+1792. Prefix for thread G76 first cut amount? "D"
+1793. Prefix for thread height? "K"
+1794. Prefix for thread angle in? "A"
+1795. Prefix for thread last cut amount? ""
+1796. Prefix for thread machine allowance? "R"
+1798. Prefix for thread chamfer number of leads (thread_chamfer_numofleads)? "E"
+1799. Prefix for thread chamfer distance (thread_chamfer_distance)? "L"
+
+1804. Prefix for Rough Cycle depth of cut? "D"
+
+1807. Prefix for Rough Cycle retract amount? "R"
+1808. Prefix for Finish Cycle stock allowance X? "U"
+1809. Prefix for Finish Cycle stock allowance Z? "W"
+1810. Prefix for Finish Cycle X stock amount for spring passes? "I"
+1811. Prefix for Finish Cycle Z stock amount for spring passes? "K"
+
+1812. Prefix for Groove Cycle retract amount? "D"
+1813. Prefix for Groove Cycle X bottom? "X"
+1814. Prefix for Groove Cycle Z bottom? "Z"
+1815. Prefix for Groove Cycle depth of cut? "K"
+1816. Prefix for Groove Cycle peck increment? "I"
+1817. Prefix for thread taper height? "I"
+1820. Prefix for tap reference plane? "R"
+1821. GCode for G32 Style tapping? "G32"
+1822. GCode for simple threading cycle? "G32"
+
+1823. Prefix for X depth for roughing cycle? "U"
+1824. Prefix for Z depth for roughing cycle? "W"
+1825. Prefix for groove dwell? "P"
+1826. Prefix for groove peck clearance? "E"
+1827. Prefix for groove peck retract? "R"
+
+1830. Code for low spindle gear? "M40"
+1831. Code for medium1 spindle gear? "M41"
+1832. Code for medium2 spindle gear? "M42"
+1833. Code for medium3 spindle gear? "M43"
+1834. Code for medium4 spindle gear? "M44"
+1835. Code for medium5 spindle gear? "M45"
+1836. Code for medium6 spindle gear? "M46"
+1837. Code for medium7 spindle gear? "M47"
+1838. Code for medium8 spindle gear? "M48"
+1839. Code for medium9 spindle gear? "M49"
+1840. Code for high spindle gear? "M000000000"
+
+1841. Prefix for drill first peck amount? "V"
+1842. Prefix for drill peck increment amount? "Q"
+1843. Prefix for Tool Home Number? "M"
+1844. Drill depth prefix? "Z"
+1845. Prefix for drill canned cycle feed rate? "F"
+1846. Prefix for initial plane? "I"
+1847. Dwell prefix? "P"
+1849. Reference Plane Prefix? "R"
+
+1850. Standard drilling cycle no dwell #1? "G81"
+1851. Peck drill cycle no dwell #2? "G83"
+1852. High speed peck drill cycle no dwell #3? "G73"
+1853. Tapping cycle no dwell #4? "G84"
+1854. Boring cycle #1 no dwell #5? "G85"
+1855. Boring cycle #2 no dwell #6? "G86"
+1856. Back boring cycle no dwell #7? "G87"
+1857. Left hand tapping cycle no dwell #8? "G74"
+1858. Fine boring cycle no dwell #9? "G76"
+
+1860. Standard drilling cycle with dwell #1? "G82"
+1861. Peck drill cycle with dwell #2? "G83"
+1862. High speed peck drill cycle with dwell #3? "G73"
+1863. Tapping cycle with dwell #4? "G84"
+1864. Boring cycle #1 with dwell #5? "G88"
+1865. Boring cycle #2 with dwell #6? "G89"
+1866. Back boring cycle with dwell #7? "G77"
+1867. Left hand tapping cycle with dwell #8? "G74"
+1868. Fine boring cycle with dwell #9? "G76"
+
+1870. G-Code for Finish Turn Canned Cycle? "G70"
+1871. G-Code for OD Rough Turn Canned Cycle? "G71"
+1872. G-Code for Face Rough Turn Canned Cycle? "G72"
+1873. G-Code for Pattern Repeat Canned Cycle? "G73"
+1874. G-Code for Face Groove Canned Cycle? "G74"
+1875. G-Code for OD Groove Canned Cycle? "G75"
+
+1876. G-Code for OD/ID Thread Cycle? "G76"
+1877. G-Code for Face Thread Cycle? "G71"
+1878. G-Code to Cancel Canned Turning/Threading Cycles? ""
+
+1880. Prefix for Rough Canned - Rough Allowance - X? "I"
+1881. Prefix for Rough Canned - Rough Allowance - Z? "K"
+1882. Prefix for Rough Canned - Finish Allowance - X? "U"
+1883. Prefix for Rough Canned - Finish Allowance - Z? "W"
+1884. Prefix for Pattern Repeat Cycle Depth of Cut X? "I"
+1885. Prefix for Pattern Repeat Cycle Depth of Cut Z? "K"
+1886. Prefix for Lathe Clearance Face? ""
+1887. Prefix for Lathe Clearance Diameter? ""
+1888. Prefix for Lathe Clearance Internal Diameter? ""
+
+6000. Zone 1 (T1 - W1) - Shift - X Axis? 0.000
+6002. Zone 1 (T1 - W1) - Shift - Z Axis? 0.000
+
+6005. Zone 1 (T1 - W1) - Scale - X Axis? 2.0
+6007. Zone 1 (T1 - W1) - Scale - Z Axis? 1.0
+
+
+
+
+2001. Program Block 1.
+
+2002. Program Block 2.
+
+2003. Program Block 3.
+
+2004. Program Block 4.
+
+2005. Program Block 5.
+
+2006. Program Block 6.
+
+2007. Program Block 7.
+
+2008. Program Block 8.
+
+2009. Program Block 9.
+
+2010. Program Block 10.
+
+2011. Program Block 11.
+
+2012. Program Block 12.
+
+2013. Program Block 13.
+
+2014. Program Block 14.
+
+2015. Program Block 15.
+
+2016. Program Block 16.
+
+2017. Program Block 17.
+
+2018. Program Block 18.
+
+2019. Program Block 19.
+
+2020. Program Block 20.
+
+2021. Program Block 21.
+
+2022. Program Block 22.
+
+2023. Program Block 23.
+
+2024. Program Block 24.
+
+2025. Program Block 25.
+
+2026. Program Block 26.
+
+2027. Program Block 27.
+
+2028. Program Block 28.
+
+2029. Program Block 29.
+
+2030. Program Block 30.
+
+2031. Program Block 31.
+
+2032. Program Block 32.
+
+2033. Program Block 33.
+
+2034. Program Block 34.
+
+2035. Program Block 35.
+
+2036. Program Block 36.
+
+2037. Program Block 37.
+
+2038. Program Block 38.
+
+2039. Program Block 39.
+
+2040. Program Block 40.
+
+2041. Program Block 41.
+
+2042. Program Block 42.
+
+2043. Program Block 43.
+
+2044. Program Block 44.
+
+2045. Program Block 45.
+
+2046. Program Block 46.
+
+2047. Program Block 47.
+
+2048. Program Block 48.
+
+2049. Program Block 49.
+
+2050. Program Block 50.
+
+2051. Program Block 51.
+
+2052. Program Block 52.
+
+2053. Program Block 53.
+
+2054. Program Block 54.
+
+2055. Program Block 55.
+
+2056. Program Block 56.
+
+2057. Program Block 57.
+
+2058. Program Block 58.
+
+2059. Program Block 59.
+
+2060. Program Block 60.
+
+2061. Program Block 61.
+
+2062. Program Block 62.
+
+2063. Program Block 63.
+
+2064. Program Block 64.
+
+2065. Program Block 65.
+
+2066. Program Block 66.
+
+2067. Program Block 67.
+
+2068. Program Block 68.
+
+2069. Program Block 69.
+
+2070. Program Block 70.
+
+2071. Program Block 71.
+
+2072. Program Block 72.
+
+2073. Program Block 73.
+
+2074. Program Block 74.
+
+2075. Program Block 75.
+
+2076. Program Block 76.
+
+2077. Program Block 77.
+
+2078. Program Block 78.
+
+2079. Program Block 79.
+
+2080. Program Block 80.
+
+2081. Program Block 81.
+
+2082. Program Block 82.
+
+2083. Program Block 83.
+
+2084. Program Block 84.
+
+2085. Program Block 85.
+
+2086. Program Block 86.
+
+2087. Program Block 87.
+
+2088. Program Block 88.
+
+2089. Program Block 89.
+
+2090. Program Block 90.
+
+2091. Program Block 91.
+
+2092. Program Block 92.
+
+2093. Program Block 93.
+
+2094. Program Block 94.
+
+2095. Program Block 95.
+
+2096. Program Block 96.
+
+2097. Program Block 97.
+
+2098. Program Block 98.
+
+2099. Program Block 99.
+
+2101. Read Entire File After Posting.
+
+2102. Read each Line on Output.
+
+2701. Lua Block 1.
+
+	function GetValue(searchKey)
+		op_id = BcPost.GetValueOfOperation("ID")
+		retTable = Bcc.GetCamObjParameters(op_id)
+
+		for key, value in pairs(retTable) do
+			if key == searchKey then
+				return value
+			end
+
+			if type(value) == "table" then
+				for k, v in pairs(value) do
+					if k == searchKey then
+						return v
+					end
+				end
+			end
+		end
+
+		return nil
+	end
+
+	function round(num, numDecimalPlaces)
+		local mult = 10^(numDecimalPlaces or 0)
+		return math.floor(num * mult + 0.5) / mult
+	end
+
+	// This is an extrenal lua function that come from the file BC_Lua_Functions.lua
+	// in the posts folder here: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions 
+	ShowOperationData()
+
+	local pitch = GetValue("thread_pitch")
+
+	if pitch then
+		// Bcc.ShowMessageBox(searchKey .. ": " .. tostring(pitch), {Title="Value from Toolpath Operation"})
+		// Bcc.ShowMessageBox(searchKey .. ": " .. tostring(pitch), {Title="Value from Toolpath Operation"})
+	else
+		Bcc.ShowMessageBox("Key or subkey not found", {Title="Error"})
+	end
+
+	local rapid_plane = "K" .. BcPost.RunVBApi("MILL_GetReturnPlaneDistance")
+	// Bcc.ShowMessageBox(rapid_plane)
+
+	local threads_per_inch = "E" .. round(1 / pitch, 0)
+	// Bcc.ShowMessageBox(threads_per_inch)
+
+
+	BcPost.ProcessPostLine("n,'G76',thread_x2,thread_z2,taper_height,'"..rapid_plane.."',thread_first_cut,'"..threads_per_inch.."',thread_angle_in")
+
+2702. Lua Block 2.
+	// n,g_arc_move,x_f,z_f,arc_center,feed_rate
+
+	ArcIvalue = "I" .. round(BcPost.RunVBApi("LATHE_GetArcCenterX"), 4)
+	ArcKvalue = "K" .. round(BcPost.RunVBApi("LATHE_GetArcCenterZ"), 4)
+	// Bcc.ShowMessageBox("ArcIvalue: " .. ArcIvalue ..  "\nArcKvalue: " .. ArcKvalue, {Title="Arc Center Values"})
+
+	BcPost.ProcessPostLine("n,g_arc_move,x_f,z_f,'"..ArcIvalue.."','"..ArcKvalue.."',feed_rate")
+
+
+2703. Lua Block 3.
+	
+
+
+
