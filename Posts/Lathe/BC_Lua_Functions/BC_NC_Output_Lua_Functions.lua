@@ -223,7 +223,7 @@ print(degrees)
 ]]
 function includeDotAfterNum(num, includeDotAfterInt)
     -- Convert num to a string
-    local num = tostring(num)
+    num = tostring(num)
 
     -- If includeDotAfterInt is true and num is a whole number, add a dot after the integer part of num
     if includeDotAfterInt and num == tostring(math.floor(num)) then
