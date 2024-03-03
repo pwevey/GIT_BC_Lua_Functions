@@ -289,6 +289,9 @@ end
     Used for Post Blocks:
         Used for start of file blocks, but could also be used in tool change blocks as well
         630 and 631: Adjust these post questions to set the comment syntax
+    Dependencies:
+        This function calls the following functions within this file:
+        - GetValueFromOperation: to get the units from the operation
 ]]
 function UnitsComment()
     local units = GetValueFromOperation("Unit")
@@ -312,6 +315,11 @@ end
         Or, call ThreadsPerInch(prefix) in Lua Blocks (2701 - 2799)
     Used for Post Blocks:
         1087 (Start of thread (G76) cycle)
+    Dependencies:
+        This function calls the following functions within this file:
+        - GetValueFromOperation: to get the pitch value from the operation
+        - round: to round the threads per inch value to the nearest whole number
+        - includeDotAfterNum: to optionally add a dot after the integer part of the threads per inch value
 ]]
 function ThreadsPerInch(prefix, includeDotAfterInt)
 
@@ -341,6 +349,9 @@ end
         Use lua_func_RadiusIArcMoveBlock1025
     Used for Post Blocks:
         1025 (Arc move (Lathe))
+    Dependencies:
+        This function calls the following functions within this file:
+        - round: to round the I and K values to 4 decimal places
 ]]
 function RadiusIArcMoveBlock1025()
     local arc_i_value = "I" .. round(BcPost.RunVBApi("LATHE_GetArcCenterX"), 4)
@@ -374,6 +385,10 @@ end
             1126. Peck drill canned cycle
             1121. High speed peck drill canned cycle
             Any other post block that uses a 'dwell' post variable
+    Dependencies:
+        This function calls the following functions within this file:
+        - round: to round the dwell value to 4 decimal places
+        - includeDotAfterNum: to optionally add a dot after the integer part of the dwell value
 ]]
 function IfDwellOutput(prefix, includeDotAfterInt)
     local dwell = round(BcPost.RunVBApi("MILL_GetDwell"), 4)
