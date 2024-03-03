@@ -37,6 +37,12 @@ end
         The formatted number as a string
 ]]
 function formatNumber(args)
+    -- Check if num parameter is provided
+    if args.num == nil then
+        Bcc.ShowMessageBox("Error: 'num' parameter is missing or not a number (formatNumber lua function). \nMake sure you provide the num parameter. \n\neg. lua_func_formatNumber({num = -1234.5678, numDecimalPlaces = 2})", {Title="formatNumber function Error"})
+        return
+    end
+    
     -- Provide default values for optional parameters
     local num = args.num
     local numDecimalPlaces = args.numDecimalPlaces or 0
@@ -60,14 +66,20 @@ function formatNumber(args)
     -- Convert to string to manipulate as string
     local numStr = tostring(num)
 
+    
     -- Remove leading zero if necessary
     if not includeLeadingZero and num > 0 and num < 1 then
         numStr = numStr:sub(2)
     end
 
-    -- Remove leading zero if necessary
-    if not includeLeadingZero and num > -1 and num < 0 then
-        numStr = "-" .. numStr:sub(3)
+        -- If the number is 0 after rounding, set numStr to "0" directly
+    if num == 0 then
+        numStr = "0"
+    else
+        -- Remove leading zero if necessary
+        if not includeLeadingZero and num > -1 and num < 0 then
+            numStr = "-" .. numStr:sub(3)
+        end
     end
 
     -- Add thousands separator if necessary
@@ -132,7 +144,19 @@ print(formatNumber({num = 24.35443, numDecimalPlaces = 0, includeDotAfterInt = f
 
 -- Scenario 15: negative number with 3 decimal places and no leading zero
 print(formatNumber({num = -.35453, numDecimalPlaces = 3, includeLeadingZero = false}))  -- Outputs: -.355
+
+print(formatNumber({num = .35453})) -- Outputs: 0.
+
+print(formatNumber({num = -.35453})) -- Outputs: 0.
+
+print(formatNumber({num = -3.35453})) -- Outputs: -3.
+
+print(formatNumber({num = 3.35453, includeDotAfterInt = false})) -- Outputs: 3
+
+-- Error: ShowMessageBox will display an error message
+print(formatNumber({includeDotAfterInt = false})) -- Outputs: Error, no num parameter provided
 ]]
+
 
 
 --[[
