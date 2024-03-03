@@ -239,3 +239,33 @@ function RadiusIArcMoveBlock1025()
 
 	BcPost.ProcessPostLine("n,g_arc_move,x_f,z_f,'"..arc_i_value.."','"..arc_k_value.."',feed_rate")
 end
+
+
+--[[ MILL FUNCTIONS ]]
+
+--[[
+    Check if a dwell exists and ouput with a prefix if it does
+    This function is needed for Peck Drilling cycles since they do not 
+    have a separate dwell post block
+    args:
+        prefix: The prefix to be used in the dwell value
+    Returns:
+        The dwell value with a prefix if dwell exists, otherwise nil
+    Set in Post Processor:
+        Use lua_func_IfDwellOutput("prefix")
+        Or, call IfDwellOutput(prefix) in Lua Blocks (2701 - 2799)
+    Used for Post Blocks:
+        73. High speed peck drill canned cycle - Fast peck
+        83. Peck drill canned cycle
+        Any other post block that uses a 'dwell' post variable
+]]
+function IfDwellOutput(prefix)
+    local dwell = round(BcPost.RunVBApi("MILL_GetDwell"), 4)
+
+    if dwell ~= 0 then
+        dwell = prefix .. dwell
+        return dwell
+    end
+
+    return nil
+end
