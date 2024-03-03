@@ -129,7 +129,7 @@ print(degrees)
 
 
 --[[
-    Lua functions used in the post processor
+    Below are Lua functions used in the post processor
     Method 1:
         Use lua_func_FunctionName
             FunctionName: The name of the function to be used in the post block
@@ -138,7 +138,6 @@ print(degrees)
     Method 2:
         Call the function directly in a lua block (2701 - 2799)
 ]]
-
 
 --[[
     Get a value from the current operation based on a search key.
@@ -175,7 +174,7 @@ end
 --[[ LATHE FUNCTIONS ]]
 
 --[[
-    Convert a pitch value to threads per inch for the Lathe Thread operation
+    Convert a pitch value to threads per inch for the Lathe Thread Operation
     args:
         prefix: The prefix to be used in the threads per inch value
     Returns:
