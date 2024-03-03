@@ -40,14 +40,22 @@ function formatNumber(args)
     -- Provide default values for optional parameters
     local num = args.num
     local numDecimalPlaces = args.numDecimalPlaces or 0
-    local includeLeadingZero = args.includeLeadingZero or false
     local useThousandsSeparator = args.useThousandsSeparator or false
-    local includeDotAfterInt = args.includeDotAfterInt or false
+
+    local includeDotAfterInt = args.includeDotAfterInt
+    if includeDotAfterInt == nil then includeDotAfterInt = true end
+
+    local includeLeadingZero = args.includeLeadingZero
+    if includeLeadingZero == nil then includeLeadingZero = true end
 
 
     -- Round to the specified number of decimal places
     local mult = 10^(numDecimalPlaces or 0)
-    num = math.floor(num * mult + 0.5) / mult
+    if num >= 0 then
+        num = math.floor(num * mult + 0.5) / mult
+    else
+        num = math.ceil(num * mult - 0.5) / mult
+    end
 
     -- Convert to string to manipulate as string
     local numStr = tostring(num)
@@ -55,6 +63,11 @@ function formatNumber(args)
     -- Remove leading zero if necessary
     if not includeLeadingZero and num > 0 and num < 1 then
         numStr = numStr:sub(2)
+    end
+
+    -- Remove leading zero if necessary
+    if not includeLeadingZero and num > -1 and num < 0 then
+        numStr = "-" .. numStr:sub(3)
     end
 
     -- Add thousands separator if necessary
@@ -79,7 +92,7 @@ end
 print(formatNumber({num = 1234.5678, numDecimalPlaces = 2, includeLeadingZero = true, useThousandsSeparator = true}))  -- Outputs: 1,234.57
 
 -- Scenario 2: Format a number with no decimal places, include leading zero, and use thousands separator
-print(formatNumber({num = 1234.5678, numDecimalPlaces = 0, includeLeadingZero = true, useThousandsSeparator = true}))  -- Outputs: 1,235
+print(formatNumber({num = 1234.5678, numDecimalPlaces = 0, includeLeadingZero = true, useThousandsSeparator = true}))  -- Outputs: 1,235.
 
 -- Scenario 3: Format a number with 2 decimal places, include leading zero, and do not use thousands separator
 print(formatNumber({num = 1234.5678, numDecimalPlaces = 2, includeLeadingZero = true, useThousandsSeparator = false}))  -- Outputs: 1234.57
@@ -95,6 +108,30 @@ print(formatNumber({num = 1234.5678, numDecimalPlaces = 1}))  -- Outputs: 1234.6
 
 -- Scenario 8: Include a dot after the integer
 print(formatNumber({num = 24, numDecimalPlaces = 0, includeDotAfterInt = true}))  -- Outputs: 24.
+
+-- Scenario 9: do not include leading zero 0 
+print(formatNumber({num = 0.125, numDecimalPlaces = 2, includeLeadingZero = false}))  -- Outputs: .13
+
+-- Scenario 10: do not include leading zero 0 for negative number 
+print(formatNumber({num = -0.125, numDecimalPlaces = 2, includeLeadingZero = false}))  -- Outputs: -.13
+
+-- Scenario 10: include leading zero 0 for negative number 
+print(formatNumber({num = -0.125, numDecimalPlaces = 2, includeLeadingZero = true}))  -- Outputs: -0.13
+
+-- Scenario 11: Format a negaitve number with 2 decimal places
+print(formatNumber({num = -1234.5678, numDecimalPlaces = 2}))  -- Outputs: -1234.57
+
+-- Scenario 12: include leading zero 0 for negative number 
+print(formatNumber({num = -0.125, numDecimalPlaces = 2}))  -- Outputs: -0.13
+
+-- Scenario 13: Do not include a dot after the negaitve integer
+print(formatNumber({num = -24.35443, numDecimalPlaces = 0, includeDotAfterInt = false}))  -- Outputs: -24
+
+-- Scenario 14: Do not include a dot after the integer
+print(formatNumber({num = 24.35443, numDecimalPlaces = 0, includeDotAfterInt = false}))  -- Outputs: 24
+
+-- Scenario 15: negative number with 3 decimal places and no leading zero
+print(formatNumber({num = -.35453, numDecimalPlaces = 3, includeLeadingZero = false}))  -- Outputs: -.355
 ]]
 
 
