@@ -46,9 +46,16 @@
 	
 
 1002. Start of program with turning cycles
+	lua_func_UnitsComment
 	lua_func_ShowOperationData
-	lua_func_GetValueFromOperation("use_tool_number")
-	lua_func_formatNumber({num = 24, numDecimalPlaces = 0, includeDotAfterInt = true})
+	lua_func_ShowValueFromOperation("use_tool_number")
+	// lua_func_formatNumber({num = 24.5, includeDotAfterInt = false})
+	lua_func_formatNumber({num = "MILL_GetXRapid", prefix = "X", numDecimalPlaces = 1 , includeDotAfterInt = false}) // Outputs: X2.3
+	lua_func_formatNumber({num = "MILL_GetXRapid", numDecimalPlaces = 1 , includeDotAfterInt = false}) // Outputs: 2.3
+	lua_func_formatNumber({num = BcPost.RunVBApi("MILL_GetXRapid"), prefix = "YES?", numDecimalPlaces = 1 , includeDotAfterInt = false}) // Outputs: YES?2.3
+	lua_func_formatNumber({num = -1023.35, prefix = "TEST", numDecimalPlaces = 1 , includeDotAfterInt = false, includeLeadingZero = false, useThousandsSeparator = false}) // Outputs: TEST-1023.4
+	lua_func_formatNumber({num = 24.3, includeDotAfterInt = false}) // Outputs: 24
+	lua_func_formatNumber({num = 24.3, prefix = "F", includeDotAfterInt = false}) // Outputs: F24
 	lua_func_convertAngle(180, "degreesToRadians")
 	comment1
 	start_comment,comment2,end_comment

@@ -28,11 +28,12 @@ end
 --[[
     Format a number to a specified number of decimal places, with optional leading zero, thousands separator, and dot after integer.
     args: A table with the following keys:
-        num: The number to be formatted
-        numDecimalPlaces: The number of decimal places to round to
-        includeLeadingZero: (Optional) Whether to include a leading zero for numbers less than 1. Default is false.
+        num: (required) The number to be formatted
+        numDecimalPlaces: The number of decimal places to round to. Default is round to nearest whole number.
+        includeLeadingZero: (Optional) Whether to include a leading zero for numbers less than 1. Default is true.
         useThousandsSeparator: (Optional) Whether to include a thousands separator. Default is false.
-        includeDotAfterInt: (Optional) Whether to include a dot after the integer part if the number is a whole number. Default is false.
+        includeDotAfterInt: (Optional) Whether to include a dot after the integer part if the number is a whole number. Default is true.
+        prefix: (Optional) A prefix to be added to the formatted number. (Primarily used for BobCAD API functions)
     returns:
         The formatted number as a string
 ]]
@@ -45,6 +46,15 @@ function formatNumber(args)
     
     -- Provide default values for optional parameters
     local num = args.num
+    local prefix = args.prefix or ""
+    -- Bcc.ShowMessageBox("init num: "..num)
+    
+    -- If num is a function (BobCAD API), call it and use its return value
+    if type(num) == "string" then
+        num = BcPost.RunVBApi(num)
+        -- Bcc.ShowMessageBox("API num: "..num)
+    end
+
     local numDecimalPlaces = args.numDecimalPlaces or 0
     local useThousandsSeparator = args.useThousandsSeparator or false
 
@@ -93,6 +103,12 @@ function formatNumber(args)
     if includeDotAfterInt and num == math.floor(num) then
         numStr = numStr .. "."
     end
+
+    -- Add prefix if necessary
+    if prefix ~= "" then
+        numStr = prefix .. numStr
+    end
+
 
     -- Show the formatted number in a message box
     -- Bcc.ShowMessageBox(numStr)
@@ -155,7 +171,13 @@ print(formatNumber({num = 3.35453, includeDotAfterInt = false})) -- Outputs: 3
 
 -- Error: ShowMessageBox will display an error message
 print(formatNumber({includeDotAfterInt = false})) -- Outputs: Error, no num parameter provided
+
+-- Scenario: Will return a bobcad api function value with the number formatted
+-- lua_func_formatNumber({num = "MILL_GetXRapid", numDecimalPlaces = 1 , includeDotAfterInt = false}) -- Outputs 2.3
+
+-- lua_func_formatNumber({num = "MILL_GetXRapid", prefix = "X", numDecimalPlaces = 1 , includeDotAfterInt = false}) -- Outputs X2.3
 ]]
+
 
 
 
