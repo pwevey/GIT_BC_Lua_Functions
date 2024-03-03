@@ -198,7 +198,7 @@ function ThreadsPerInch(prefix)
 
 
     local threads_per_inch = prefix .. round(1 / pitch, 0)
-    Bcc.ShowMessageBox(threads_per_inch)
+    -- Bcc.ShowMessageBox(threads_per_inch)
 
     return threads_per_inch
 end
@@ -216,7 +216,7 @@ end
 function RadiusIArcMoveBlock1025()
     ArcIvalue = "I" .. round(BcPost.RunVBApi("LATHE_GetArcCenterX"), 4)
 	ArcKvalue = "K" .. round(BcPost.RunVBApi("LATHE_GetArcCenterZ"), 4)
-	Bcc.ShowMessageBox("ArcIvalue: " .. ArcIvalue ..  "\nArcKvalue: " .. ArcKvalue, {Title="Arc Center Values"})
+	-- Bcc.ShowMessageBox("ArcIvalue: " .. ArcIvalue ..  "\nArcKvalue: " .. ArcKvalue, {Title="Arc Center Values"})
 
 	BcPost.ProcessPostLine("n,g_arc_move,x_f,z_f,'"..ArcIvalue.."','"..ArcKvalue.."',feed_rate")
 end
