@@ -171,6 +171,26 @@ function GetValueFromOperation(searchKey)
 end
 
 
+--[[ General FUNCTIONS ]]
+
+--[[
+    Outputs a comment in the NC file with the units of the job.
+    Returns:
+        Outputs a comment in the NC file with the units of the job.
+    Set in Post Processor:
+        Use lua_func_UnitsComment
+    Used for Post Blocks:
+        Used for start of file blocks, but could also be used in tool change blocks as well
+        630 and 631: Adjust these post questions to set the comment syntax
+]]
+function UnitsComment()
+    local units = GetValueFromOperation("Unit")
+	-- Bcc.ShowMessageBox("ArcIvalue: " .. ArcIvalue ..  "\nArcKvalue: " .. ArcKvalue, {Title="Arc Center Values"})
+
+	BcPost.ProcessPostLine("comment_start,'Units: "..units.." ',comment_end")
+end
+
+
 --[[ LATHE FUNCTIONS ]]
 
 --[[
