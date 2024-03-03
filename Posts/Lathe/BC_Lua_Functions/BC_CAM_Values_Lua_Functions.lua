@@ -1,4 +1,9 @@
 --[[
+    TODO: Evaluate ThreadsPerInch(prefix) so that you can place the lua_func_ on the same line as of post variables
+            Link: https://bobcad.atlassian.net/servicedesk/customer/portal/3/BIT-864
+]]
+
+--[[
     The following functions are used throught out other functions
     in this file
     
@@ -125,18 +130,56 @@ print(degrees)
 
 --[[
     Lua functions used in the post processor
-    Use lua_func_FunctionName
-        FunctionName: The name of the function to be used in the post block
-    If the function takes an argument, use lua_func_FunctionName(argument)
-        argument: The argument to be used in the function
+    Method 1:
+        Use lua_func_FunctionName
+            FunctionName: The name of the function to be used in the post block
+        If the function takes an argument, use lua_func_FunctionName(argument)
+            argument: The argument to be used in the function
+    Method 2:
+        Call the function directly in a lua block (2701 - 2799)
 ]]
+
+
+--[[
+    Get a value from the current operation based on a search key.
+        searchKey: The key to search for in the operation's parameters.
+    Returns:
+        The value associated with the search key, or nil if the key is not found.
+
+    Usage scenarios:
+        -- Get the thread pitch from the current operation
+        local threadPitch = GetValueFromOperation("thread_pitch")  -- Outputs: The value of thread_pitch, or nil if not found
+]]
+function GetValueFromOperation(searchKey)
+    local op_id = BcPost.GetValueOfOperation("ID")
+    local retTable = Bcc.GetCamObjParameters(op_id)
+
+    for key, value in pairs(retTable) do
+        if key == searchKey then
+            return value
+        end
+
+        if type(value) == "table" then
+            for k, v in pairs(value) do
+                if k == searchKey then
+                    return v
+                end
+            end
+        end
+    end
+
+    return nil
+end
+
+
+--[[ LATHE FUNCTIONS ]]
 
 --[[
     Convert a pitch value to threads per inch for the Lathe Thread operation
     args:
         prefix: The prefix to be used in the threads per inch value
     Returns:
-        The threads per inch value rounded to the nearest whole number
+        The threads per inch value with a prefix rounded to the nearest whole number
     Set in Post Processor:
         Use lua_func_ThreadsPerInch("prefix")
         Or, call ThreadsPerInch(prefix) in Lua Blocks (2701 - 2799)
@@ -144,38 +187,36 @@ print(degrees)
         1087 (Start of thread (G76) cycle)
 ]]
 function ThreadsPerInch(prefix)
-    function GetValue(searchKey)
-        local op_id = BcPost.GetValueOfOperation("ID")
-        local retTable = Bcc.GetCamObjParameters(op_id)
 
-        for key, value in pairs(retTable) do
-            if key == searchKey then
-                return value
-            end
-
-            if type(value) == "table" then
-                for k, v in pairs(value) do
-                    if k == searchKey then
-                        return v
-                    end
-                end
-            end
-        end
-
-        return nil
-    end
-
-    local pitch = GetValue("thread_pitch")
+    local pitch = GetValueFromOperation("thread_pitch")
 
     if pitch then
         -- Bcc.ShowMessageBox(searchKey .. ": " .. tostring(pitch), {Title="Value from Toolpath Operation"})
     else
-        Bcc.ShowMessageBox("Key or subkey not found. For a lathe thread operation, please use threads per inch.", {Title="Error"})
+        Bcc.ShowMessageBox("Key or subkey not found. This function is meant for a lathe thread operation.", {Title="Error"})
     end
 
 
-    local threads_per_inch = "E" .. round(1 / round(pitch, 4), 0)
-    -- Bcc.ShowMessageBox(threads_per_inch)
+    local threads_per_inch = prefix .. round(1 / pitch, 0)
+    Bcc.ShowMessageBox(threads_per_inch)
 
     return threads_per_inch
+end
+
+
+--[[
+    Outputs the Lathe arc move post block with I values converted from diameter to radius
+    Returns:
+        The whole post block for the Lathe Arc Move (Post Block: 1025) with I values converted from diameter to radius
+    Set in Post Processor:
+        Use lua_func_RadiusIArcMoveBlock1025
+    Used for Post Blocks:
+        1025 (Arc move (Lathe))
+]]
+function RadiusIArcMoveBlock1025()
+    ArcIvalue = "I" .. round(BcPost.RunVBApi("LATHE_GetArcCenterX"), 4)
+	ArcKvalue = "K" .. round(BcPost.RunVBApi("LATHE_GetArcCenterZ"), 4)
+	Bcc.ShowMessageBox("ArcIvalue: " .. ArcIvalue ..  "\nArcKvalue: " .. ArcKvalue, {Title="Arc Center Values"})
+
+	BcPost.ProcessPostLine("n,g_arc_move,x_f,z_f,'"..ArcIvalue.."','"..ArcKvalue.."',feed_rate")
 end
