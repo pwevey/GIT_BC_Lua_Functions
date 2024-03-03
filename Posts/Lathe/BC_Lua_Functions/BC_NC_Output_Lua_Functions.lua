@@ -351,7 +351,7 @@ function RadiusIArcMoveBlock1025()
 end
 
 
---[[ MILL FUNCTIONS ]]
+--[[ MILL & LATHE FUNCTIONS ]]
 
 --[[
     Check if a dwell exists and ouput with a prefix if it does
@@ -366,9 +366,14 @@ end
         Use lua_func_IfDwellOutput("prefix")
         Or, call IfDwellOutput(prefix) in Lua Blocks (2701 - 2799)
     Used for Post Blocks:
-        73. High speed peck drill canned cycle - Fast peck
-        83. Peck drill canned cycle
-        Any other post block that uses a 'dwell' post variable
+        Mill: 
+            73. High speed peck drill canned cycle - Fast peck
+            83. Peck drill canned cycle
+            Any other post block that uses a 'dwell' post variable
+        Lathe: 
+            1126. Peck drill canned cycle
+            1121. High speed peck drill canned cycle
+            Any other post block that uses a 'dwell' post variable
 ]]
 function IfDwellOutput(prefix, includeDotAfterInt)
     local dwell = round(BcPost.RunVBApi("MILL_GetDwell"), 4)
@@ -385,3 +390,6 @@ function IfDwellOutput(prefix, includeDotAfterInt)
 
     return nil
 end
+
+
+--[[ MILL & FUNCTIONS ]]
