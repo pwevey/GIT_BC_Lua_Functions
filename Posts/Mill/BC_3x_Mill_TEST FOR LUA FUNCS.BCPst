@@ -1,0 +1,1473 @@
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//---BobCAD-CAM Post Processor ----------------------------------------
+//---------------------------------------------------------------------
+//-- Initial Software Version: BobCAD-CAM V31
+//-- Initial Creation Date: 7/31/2018
+//-- Author: BobCAD-CAM
+//-- Machine: BC_3x_Mill
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//-- REVISION LOG -----------------------------------------------------
+//-- 2/14/2024
+//--   1. First item
+//--   2. second item
+//--   3. 3rd itme
+//--
+//-- 07/30/18 - Initial setup as V31 3 axis post
+//-- 07/20/21 - Added new coolant blocks for V34
+//-- 05/03/2022 - Added MDI variables
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//-- SPECIAL NOTES ABOUT THIS POST AND MACHINE ------------------------
+//---------------------------------------------------------------------
+//--
+//--TODO
+//---------------------------------------------------------------------
+//TODO: add
+
+****Version Number MONTH DAY YEAR****
+1000. Version Information = Version Month Day Year? "11.0 12 12 2016"
+
+0. File header
+	"%"
+	comment_start,"JOBSETUP[",prog_name_no_ext_no_path, force_no_add_spaces,".mwjs]JOBSETUP",comment_end
+	default_add_spaces
+	"O",prog_n,comment_start,"PROGRAM NUMBER",comment_end
+	"(PROGRAM NAME - ",prog_name,")"
+	"(POST - ",machine_make,machine_model,")"
+	"(DATE - ",output_date,")"
+	"(TIME - ",output_time,")"
+	user_comment_1
+	user_comment_2
+	user_comment_3
+	user_comment_4
+	user_comment_5
+	user_comment_6
+	user_comment_7
+	user_comment_8
+	user_comment_9
+	user_comment_10
+	user_comment_11
+	user_comment_12
+	user_comment_13
+	user_comment_14
+	user_comment_15
+	" "
+	//"(BEGIN PREDATOR NC HEADER)"
+	//"(COORD_SYS 1=X0 Y0 Z0)"
+	//output_tool_list
+	//output_stock_definition
+	//"(END PREDATOR NC HEADER)"
+	//" "
+	program_block_1
+
+1. Start of file
+
+999999. Hello Test
+	
+2. Start of file standard
+	n,rapid_move_forced, work_plane,, force_cancel_offset,"G49",work_coord,cancel_drill_cycle,measure_mode,absolute_coord
+	" "
+	"(FIRST CUT - FIRST TOOL)"
+	system_comment
+	feature_name_comment
+	" "
+	lua_block_1
+	" "
+	MDI_BeforeToolChange	
+	"(TOOL #",list_tool_number," ",tool_diameter," ",tool_label,")"
+	n,t,"M06"
+	n,work_coord
+	output_primary_rotary_index
+	output_secondary_rotary_index
+	MDI_AfterToolChange	
+	n,rapid_move,absolute_coord,xr,yr,p_rot,s_rot,s,spindle_on
+	n,rapid_move,length_offset,d_offset,zr,coolant_on
+
+3997. Start of file with probe
+	n,rapid_move_forced, work_plane, force_cancel_offset,"G49",work_coord,cancel_drill_cycle,measure_mode,absolute_coord
+	" "
+	"(FIRST OP - FIRST PROBE)"
+	system_comment
+	feature_name_comment
+	" "
+	"(TOOL #",list_tool_number," ",tool_diameter," ",tool_label,")"
+	n,t,"M06"
+	n,work_coord
+	output_primary_rotary_index
+	output_secondary_rotary_index
+	n,rapid_move,absolute_coord,xr,yr,p_rot,s_rot
+	n,rapid_move,length_offset,zr
+	
+4997. Start of file with tool setter
+	n,rapid_move_forced, work_plane, force_cancel_offset,"G49",work_coord,cancel_drill_cycle,measure_mode,absolute_coord
+	" "
+	"(TOOL SETTER - FIRST TOOL)"
+	system_comment
+	feature_name_comment
+	" "
+	"(TOOL #",list_tool_number," ",tool_diameter," ",tool_label,")"
+	n,t,"M06"
+	n,work_coord
+
+3. Tool change
+	n,absolute_coord
+	n,optional_stop
+	" "
+	"(NEXT CUT - NEXT TOOL)"
+	system_comment
+	feature_name_comment
+	" "
+	MDI_BeforeToolChange	
+	"(TOOL #",list_tool_number,tool_diameter,tool_label,")"
+	n,t,"M06"
+	n,work_coord
+	n,work_plane
+	output_primary_rotary_index
+	output_secondary_rotary_index
+	MDI_AfterToolChange	
+	n,initialize_gcode,force_x,force_y,rapid_move,absolute_coord,xr,yr,p_rot,s_rot,s,spindle_on
+	n,rapid_move,length_offset,d_offset,zr,coolant_on
+
+3998. Probe tool change 
+	n,absolute_coord
+	n,optional_stop
+	" "
+	"(NEXT OP - NEXT PROBING TOOL)"
+	system_comment
+	feature_name_comment
+	" "
+	"(TOOL #",list_tool_number,tool_diameter,tool_label,")"
+	n,t,"M06"
+	n,work_coord
+	n,work_plane
+	output_primary_rotary_index
+	output_secondary_rotary_index
+	n,initialize_gcode,force_x,force_y,rapid_move,absolute_coord,xr,yr,p_rot,s_rot
+	n,rapid_move,length_offset,zr
+
+4998. Probe tool setter tool change 
+	n,absolute_coord
+	n,optional_stop
+	" "
+	"(NEXT OP - NEXT TOOL)"
+	system_comment
+	feature_name_comment
+	" "
+	"(TOOL #",list_tool_number,tool_diameter,tool_label,")"
+	n,t,"M06"
+	n,work_coord
+	n,work_plane
+
+
+4. Null tool change
+	" "
+	"(NEXT CUT - SAME TOOL)"
+	system_comment
+	feature_name_comment
+	" "
+	MDI_BeforeToolChange	
+	n,work_coord
+	n,work_plane
+	output_primary_rotary_index
+	output_secondary_rotary_index
+	MDI_AfterToolChange	
+	n,initialize_gcode,force_x,force_y,rapid_move,xr,yr,p_rot,s_rot,s
+
+3999. Probe null tool change
+	" "
+	"(NEXT OP - SAME PROBE)"
+	system_comment
+	feature_name_comment
+	" "
+	n,work_coord
+	n,work_plane
+	output_primary_rotary_index
+	output_secondary_rotary_index
+	n,initialize_gcode,force_x,force_y,rapid_move,xr,yr,p_rot,s_rot
+	n,rapid_move,zr
+	
+4999. Tool Setter null tool change
+	" "
+	"(NEXT OP - SAME TOOL)"
+	system_comment
+	feature_name_comment
+	" "
+	n,work_coord
+	n,work_plane
+
+5. End of file
+	n,coolant_off
+	n,spindle_off
+	n,absolute_coord
+	n,first_tool_with_prefix,"M06"
+	" "
+	"(END OF FILE)"
+	n,"M30"
+
+7. Sub program call
+	n,sub_call,sub_num,"(SUBPROGRAM CALL)"
+
+8. Sub definition
+	" "
+	sub_num_with_prefix,sub_comment
+
+9. Sub program return
+	sub_return
+
+10. Primary rotary axis index string
+	n,primary_rotary_angle_output
+
+11. Cancel cutter compensation
+	cancel_offset
+
+12. Cutter compensation left
+	g_code_cc, d_offset
+
+13. Cutter compensation right
+	g_code_cc,d_offset
+
+14. Tool length compensation
+	" G43",h,force_z
+
+15. First Machine Setup
+	" "
+	"(FIRST MACHINE SETUP - ",setup_name,")"
+	" "
+
+16. Machine Setup Change
+	" "
+	n,stop
+	"(NEXT MACHINE SETUP - ",setup_name,")"
+	" "
+
+17. Secondary rotary axis index string
+	n,secondary_rotary_angle_output
+
+20. Spindle speed low range
+	"M41","(LOW RANGE SPINDLE)"
+
+21. Spindle speed high range
+	"M42","(HIGH RANGE SPINDLE)"
+
+22. Rigid tapping start
+	n,"G95"
+
+23. Rigid tapping end 
+	n,"G94"
+
+24. File trailer
+	" "
+	"(END OF PROGRAM)"
+	"%"
+
+26. Set debug comments for post editing
+	debug_on
+
+27. First Rapid Move Z
+	n,rapid_move,zr
+
+30. Initial positioning code for operation not on transform plane
+ 
+31. Initial positioning code for operation on transform plane
+	
+32. End code for operation not on transform plane
+
+33. End code for operation on transform plane
+
+39. Part Number
+
+40. Start of operation
+
+41. End of contour
+
+45. 5 axis tool length compensation
+	rtcp_code_on,h,force_z
+
+50. Line rapid move Z - Z retract
+	n,rapid_move,zr
+
+51. Line feed move Z
+	n,feed_move,z_f,feed_rate
+
+52. Line rapid move XY
+	n,rapid_move,xr,yr,p_rot,s_rot
+
+53. Line feed move XY
+	n,feed_move,x_f,y_f,feed_rate
+
+54. Line rapid move XYZ
+	n,rapid_move,xr,yr,zr
+
+55. Line feed move XYZ
+	n,feed_move,x_f,y_f,z_f,feed_rate
+
+56. Line feed move XY on lead-in
+	n,cc,feed_move,x_f,y_f,feed_rate
+
+57. Line feed move XY on lead-out
+	n,cc,feed_move,x_f,y_f,feed_rate
+
+64. Arc move XY
+	n,g_arc_plane,g_arc_move,x_f,y_f,z_f,arc_center,feed_rate
+
+65. Arc move YZ
+	n,g_arc_plane,g_arc_move,x_f,y_f,z_f,arc_center,feed_rate
+
+66. Arc move XZ
+	n,g_arc_plane,g_arc_move,x_f,y_f,z_f,arc_center,feed_rate
+
+71. End of operation
+
+73. High speed peck drill canned cycle - Fast peck
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+74. Left handed tapping canned cycle
+	rigid_tapping_start
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,canned_feed_rate
+
+76. Fine boring canned cycle
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+80. Drill canned cycle cancel
+	n,cancel_drill_cycle
+	rigid_tapping_end
+
+81. Standard drill canned cycle
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,canned_feed_rate
+
+82. Standard drill canned cycle with dwell
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,dwell,canned_feed_rate
+
+83. Peck drill canned cycle
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+	lua_func_IfDwellOutput("P") // Output: P10
+	lua_func_IfDwellOutput("P", true) // if true in second arg, includeDotAfterInt Output: P10. 
+
+84. Tapping canned cycle
+	rigid_tapping_start
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,canned_feed_rate
+
+85. Boring cycle #1 canned cycle
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,canned_feed_rate
+
+86. Boring cycle #2 canned cycle
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,canned_feed_rate
+
+87. Boring cycle #3 (Back boring) cycle canned cycle
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+88. Boring cycle #1 canned cycle with dwell
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,dwell,canned_feed_rate
+
+89. Boring cycle #2 canned cycle with dwell
+	n,g_canned_cycle,g98_g99,x_f,y_f,drill_depth,reference_plane,dwell,canned_feed_rate
+
+90. Canned cycle drill point format WITH SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+91. Canned cycle drill point format for standard drill canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+92. Canned cycle drill point format for standard drill canned cycle with dwell NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+93. Canned cycle drill point format for peck drill canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+94. Canned cycle drill point format for tapping canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+95. Canned cycle drill point format for boring cycle #1 canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+96. Canned cycle drill point format for boring cycle #2 canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+97. Canned cycle drill point format for boring cycle #3 (back boring) canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+98. Canned cycle drill point format for boring cycle #1 canned cycle with dwell NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+99. Canned cycle drill point format for boring cycle #2 canned cycle with dwell NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+	
+100. Absolute coordinate output (outputs at beginning of sub-program)
+	 n,absolute_coord
+
+101. Incremental coordinate output (outputs at end of sub-program)
+	n,incremental_coord			
+
+108. Rectangular stock format
+	"(SBOX","X",stock_min_x,"Y",stock_min_y,"Z",stock_min_z,"L",stock_length,"W",stock_width,"H",stock_height,")"
+
+109. Rotary stock format
+	"(SCYL",rotation_axis,"X0","Y0","Z0",rotary_stock_diameter,rotary_stock_length,")"
+
+110. Tool list format ( output using output_tool_list variable )
+	"(MTOOL","T",list_tool_number,mtool_type,"D",tool_diameter,mtool_corner_rad,mtool_angle,"H",tool_length,")"
+
+111. Rotary Rewind before toolchange block
+
+113. Canned cycle drill point format for high speed peck drill canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+114. Canned cycle drill point format for left handed tapping canned cycle NO SUBPROGRAMS
+	n,x_f,y_f,zr_no_output
+
+152. Line rapid move XY when wrapping
+	n,rapid_move,xr,p_rot,s_rot
+
+153. Line feed move XY when wrapping
+	n,feed_mode,feed_move,rotary_xy_f,p_rot,s_rot,feed_rate
+
+154. Line rapid move XYZ when wrapping
+	n,feed_mode,rapid_move,xr,zr,p_rot,s_rot
+
+155. Line feed move XYZ when wrapping
+	n,feed_mode,feed_move,rotary_xy_f,z_f,p_rot,s_rot,feed_rate
+
+156. Line feed move XY on Lead-in when wrapping
+	n,feed_mode,cc,feed_move,rotary_xy_f,p_rot,s_rot,feed_rate
+
+157. Line feed move XY on Lead-out when wrapping
+	n,feed_mode,cc,feed_move,rotary_xy_f,p_rot,s_rot,feed_rate
+
+164. Arc move when wrapping
+	n,feed_mode,g_arc_move,p_rot,s_rot,arc_center,feed_rate
+
+170. High speed peck drill canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+171. Left handed tapping canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,canned_feed_rate
+
+172. Fine boring canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+173. Drill canned cycle cancel when wrapping
+
+174. Standard drill canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,canned_feed_rate
+
+175. Standard drill canned cycle with dwell when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,dwell,canned_feed_rate
+
+176. Peck drill canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+177. Tapping canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,canned_feed_rate
+
+178. Boring cycle #1 canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,canned_feed_rate
+
+179. Boring cycle #2 canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,canned_feed_rate
+
+180. Back boring cycle canned cycle when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+
+181. Boring cycle #1 canned cycle with dwell when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,dwell,canned_feed_rate
+
+182. Boring cycle #2 canned cycle with dwell when wrapping
+	n,g_canned_cycle,g98_g99,rotary_xy_f,p_rot,s_rot,drill_depth,reference_plane,dwell,canned_feed_rate
+
+183. Canned cycle drill point format for standard drill canned cycle when wrapping WITH SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+184. Canned cycle drill point format high speed peck drill when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+185. Canned cycle drill point format left hand tapping when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+186. Canned cycle drill point format fine boring when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+187. Canned cycle drill point format standard drill when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+188. Canned cycle drill point format standard drill with dwell when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+189. Canned cycle drill point format peck drill when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+190. Canned cycle drill point format point tap when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+191. Canned cycle drill point format boring 1 when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+192. Canned cycle drill point format boring 2 when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+193. Canned cycle drill point format back boring (boring 3) when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+194. Canned cycle drill point format boring 1 with dwell when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+195. Canned cycle drill point format boring 2 with dwell when wrapping NO SUBPROGRAMS.
+	n,rotary_xy_f,p_rot,s_rot,zr_no_output
+
+197. End of operation - Toolchange
+	n,coolant_off
+	n,spindle_off
+	n,optional_stop
+	MDI_AfterOperation
+	
+198. End of operation - No Toolchange
+	MDI_AfterOperation	
+
+199. End of last operation 
+	MDI_AfterOperation
+
+200. Is X modal? y
+201. Is Y modal? y
+202. Is Z modal? y
+203. Are the g codes modal? y
+204. Are the g codes (G02 and G03) modal in arc milling? y
+205. Are the XY (or YZ or XZ) coordinates modal in arc milling? y
+206. Are work coordinates modal ? n
+207. Output sequence numbers in sub programs ? y
+208. Output sequence numbers? y
+209. Number of places for sequence numbers? 2
+210. Delete the decimal point? n
+211. Delete leading zeros? n
+212. Delete trailing zeros? y
+213. Unit output (S=System, FE=Force English, FM=Force Metric)? S
+214. Places before decimal point for reals (X,  Y,  Z)? 1
+215. Number of places for Tool Numbers? 1
+216. Places after decimal for feed rate ? 4
+217. Scale factor for feed rate ? 1
+218. Number of places for the program number? 4
+219. Add spaces to the program? y
+
+221. Break arcs into quadrants? n
+222. Arc center (a=absolute,  b=incremental,  d=unsigned inc.,  e=radius)? b
+223. Break arcs into two pieces if greater than 180 degrees? n
+228. Support Unicode Output? n
+229. Allow coolant on off codes to be output on a single line? n
+230. Use Standard drilling canned cycle? y
+231. Use peck drill canned cycle? y
+232. Use High speed peck drill canned cycle? y
+233. Use tapping canned cycle? y
+234. Use boring cycle #1 canned cycle? y
+235. Use boring cycle #2 canned cycle? y
+236. Use back boring cycle canned cycle? y
+237. Use left hand tap cycle canned cycle? y
+238. Use fine boring cycle canned cycle? y
+239. Output 0 dwell value? y
+
+240. Amount to add to t to obtain t1? 0
+241. Amount to add to t to obtain t2? 0
+242. Value of t1 at t = 0? 0
+243. Value of t2 at t = 0? 0
+258. Maximum number of work offsets? 26
+262. Add sign to all coordinate values? n
+267. Amount to add to tool # for tool register value? 
+
+272. Rigid tapping? n
+
+273. Output programmable rotary axis codes? y
+274. Rotary Clamping Output Mode(0=Off, 1=Standard)? 1
+280. Primary Rotary Axis Modal? y
+281. Secondary Rotary Axis Modal? y
+
+315. Minimum part height? 0.00000
+
+319. Break arcs with radius larger than? 0.01
+320. Arc segment breaking tolerance? 0.001
+321. Line segment maximum length? 999.99
+
+322. Maximum inverse feedrate? 9999.99
+323. Minimum inverse feedrate? 0.0
+324. Maximum degrees per minute feedrate? 100000.00
+
+414. Number of decimal places for metric numbers ? 3
+415. Number of decimal places for English numbers? 4
+425. Number of decimal for angles? 3
+426. Number of leading decimal places for angles? 2
+
+427. Tapping feed rate (1=IPM 2=IPR)? 2
+428. Feed rates other than tapping (1=IPM 2=IPR)? 1
+429. Maximum spindle speed for tapping? 25000
+431. Spindle speed for high range? 25000
+
+432. Add amount for tool number in tool list? 0
+
+433. Maximum sequence number allowed (used when #534 is y)? 9999
+
+440. What is the rotary output type (0=Abs Pos 1=Signed ABS 2=Signed Continuous) ? 2
+441. Multiaxis feed type (0=UPM, 1=INV on all, 2=INV on Rotary, 3=INV on 4/5 Axis 4=DPM on rotary only 5=DPM on rotary/linear)? 2
+442. Wrapping X axis is (1=primary 2=secondary 3=tertiary)? 1
+443. Wrapping Y axis is (1=primary 2=secondary 3=tertiary)? 2
+444. Wrapping Z axis is (1=primary 2=secondary 3=tertiary)? 3
+445. Rewind rotary axes at toolchange? y
+
+446. Arc Center Output Modal? y
+
+511. Use incremental coordinates? n
+512. Use block delete for stop codes (M00)? n
+515. Output G99 instead of G98 in drilling? y
+516. Output G98/G99 in drilling? y
+526. Start renumbering from start number for sub programs? n
+531. Replace spaces in comment with commas ? n
+533. Output sub programs at the beginning of the program? n
+534. Re-Start sequence numbering once maximum sequence number is reached? n
+535. Are Feed Rates modal? y
+536. Force all codes to upper case ? y
+540. Check each output line with scripting? n
+
+550. Break arc segments into lines (Make sure to adjust value in block 319)? n
+551. Break line segments into smaller lines? n
+552. Support only G17 Arcs? n
+553. Break helix into lines? n
+554. Convert small arcs to lines (arc length to be specified in block 555.)? n
+555. Small arc length to break? 0.0025
+556. Arc break rule based on posting mode? 0
+//valid input values for 556. are 0 = no extra rule and will use post block 550., 1= TCP, 2=Machine Comp in Z only, 4=Hybrid Comp, 8= No Comp, 16= Origin Tracking, combinations of the values like 3 = 1+2 will break arc for TCP and Machine Comp in Z only modes
+
+605. Spindle speed prefix? "S"
+606. Feedrate prefix? "F"
+607. Dwell prefix? "P"
+613. Pattern contour sub program start code? ""
+614. Inch mode machining? "G20"
+615. Metric mode machining? "G21"
+620. Absolute coordinates? "G90"
+621. Incremental coordinates? "G91"
+622. Coordinate zero set? "G92"
+625. End of file? "M02"
+626. Program Stop? "M00"
+627. Optional Stop? "M01"
+628. Sub program call? "M98"
+629. Sub program return? "M99"
+630. Comment Start? "("
+631. Comment End? ")"
+639. Cancel cutter compensation? "G40"
+640. Prefix for arc Z center? "K"
+641. Prefix for radius values? "R"
+642. Prefix for arc X center? "I"
+643. Prefix for arc Y center? "J"
+645. Sub program prefix? "O"
+646. Machine maker? "BC_3X_MILL"
+647. Machine model? "3-AXIS GENERIC FANUC"
+648. Part Height prefix? "None"
+649. Reference Plane prefix? "R"
+650. Cutter compensation left code? "G41"
+651. Cutter compensation right code? "G42"
+652. Machine Coordinate Code? "G53"
+653. Machine Home Code(G28)? "G28"
+654. Tool Change Code? "M06"
+655. Gcode for Dwell? "G04"
+
+656. Block delete? "/"
+658. Sub program call sub number prefix? "P"
+659. Add these characters to the end of each line? ""
+670. Spindle forward (CW) string? "M03"
+671. Spindle reverse (CCW) string? "M04"
+672. Spindle off string? "M05"
+673. Coolant on (Flood) string? "M08"
+674. Coolant off String? "M09"
+675. First peck prefix? "I"
+676. Peck drill prefix? "Q"
+677. Drill depth prefix? "Z"
+678. Diameter offset prefix? "D"
+679. Cancel drilling canned cycle? "G80"
+
+680. G Code for Rapid Move? "G00"
+681. G Code for Feed Move? "G01"
+682. G Code for Arc CW? "G02"
+683. G Code for Arc CCW? "G03"
+
+684. Prefix for X Move? "X"
+685. Prefix for Y Move? "Y"
+686. Prefix for Z Move? "Z"
+
+687. Prefix for drill canned cycle feed rate? "F"
+688. Prefix for tool length offset? "H"
+689. Prefix for initial plane? "I"
+690. Prefix for X Rotation Move? "A"
+691. Prefix for XY Machining Plane? "G17"
+692. Prefix for XZ Machining Plane? "G18"
+693. Prefix for YZ Machining Plane? "G19"
+694. Prefix for Y Rotation Move? "B"
+
+695. Prefix for tapping feed rate (variable tapping_feedrate)? "FF"
+696. Prefix for tapping spindle speed (variable tapping_spindle_speed)? "SS"
+697. Prefix for threads per inch (variable threads_per_inch)? ""
+698. Prefix for thread lead (variable thread_lead)? ""
+699. Prefix for Tool Angle (variable mtool_angle)? "A"
+700. Prefix for Tool CornerRadius (variable mtool_corner_rad)? "C"
+701. Prefix for Tool Type (variable mtool_type)? "S"
+702. Prefix for rotation axis (variable rotation_axis)? "S"
+703. Prefix for rotary stock diameter (variable rotary_stock_diameter)? "D"
+704. Prefix for rotary stock length (variable rotary_stock_length)? "L"
+705. Prefix for Z Feed Rate? "F"
+706. Coolant Mist code? "M07"
+707. Coolant Air code? "M07"
+708. Coolant Oil code? "M07"
+710. Primary Rotary CW direction code? "M13"
+711. Primary Rotary CCW direction code? "M14"
+712. Secondary rotary CW direction code? "M113"
+713. Secondary rotary CCW direction code? "M114"
+714. Inverse feed rate machining? "G93"
+715. Feed per minute machining? "G94"
+716. Primary rotary axis clamp on? "M10"
+717. Primary rotary axis clamp off? "M11"
+718. Secondary rotary axis clamp on? "M110"
+719. Secondary rotary axis clamp off? "M111"
+720. RTCP code ON? "G43.4"
+721. RTCP code OFF? "G49"
+722. Primary Rotary prefix string? "A"
+723. Secondary Rotary prefix string? "B"
+724. Third Rotary prefix string? "C"
+725. Rotary forward direction string? "+"
+726. Rotary reverse direction string? "-"
+727. Retract to initial position? "G98"
+728. Retract to R Plane? "G99"
+729. Feed Mode UPR Code? "G99"
+730. Origin tracking on Code? "G254"
+731. Origin tracking off Code? "G255"
+
+732. Lua sub folder? "BC_Lua_Functions"
+
+750. Laser-Plasma-Waterjet Cutter Width Prefix? 
+751. Laser-Plasma-Waterjet Pierce Height Z Location Prefix? 
+752. Laser-Plasma-Waterjet Cutter On Code? 
+753. Laser-Plasma-Waterjet Cutter Off Code? 
+760. Laser-Plasma Gas Assist On? 
+761. Laser-Plasma Gas Assist Off? 
+762. Laser-Plasma Gas Assist With Air? 
+763. Laser-Plasma Gas Assist With Oxygen? 
+764. Laser-Plasma Gas Assist With Oxyacetylene? 
+765. Laser-Plasma Shutter Open? 
+766. Laser-Plasma Shutter Closed? 
+767. Laser-Plasma Pulse Frequency Prefix? 
+768. Laser-Plasma Power Setting Prefix? 
+769. Laser-Plasma Torch Height Control Prefix? 
+780. Waterjet Abrasive ON? 
+781. Waterjet Abrasive OFF? 
+782. Waterjet Vacuum Assist ON? 
+783. Waterjet Vacuum Assist OFF? 
+784. Waterjet Pressure Low? 
+785. Waterjet Pressure Medium? 
+786. Waterjet Pressure High? 
+
+800. Standard drilling cycle no dwell #1? "G81"
+801. Peck drill cycle no dwell #2? "G83"
+802. High speed peck drill cycle no dwell #3? "G73"
+803. Tapping cycle no dwell #4? "G84"
+804. Boring cycle #1 no dwell #5? "G85"
+805. Boring cycle #2 no dwell #6? "G86"
+806. Back boring cycle no dwell #7? "G87"
+807. Left hand tapping cycle no dwell #8? "G74"
+
+820. Standard drilling cycle with dwell #1? "G82"
+821. Peck drill cycle with dwell #2? "G83"
+822. High speed peck drill cycle with dwell #3? "G73"
+823. Tapping cycle with dwell #4? "G84"
+824. Boring cycle #1 with dwell #5? "G88"
+825. Boring cycle #2 with dwell #6? "G89"
+826. Back boring cycle with dwell #7? "G77"
+827. Left hand tapping cycle with dwell #8? "G74"
+
+840. Coolant 1 ON code? "M08"
+841. Coolant 2 ON code? "M07"
+842. Coolant 3 ON code? "M83"
+843. Coolant 4 ON code? "M88"
+844. Coolant 5 ON code? "M31"
+845. Coolant 6 ON code? ""
+846. Coolant 7 ON code? ""
+847. Coolant 8 ON code? ""
+848. Coolant 9 ON code? ""
+849. Coolant 10 ON code? ""
+
+850. Coolant 1 OFF code? "M09"
+851. Coolant 2 OFF code? "M84"
+852. Coolant 3 OFF code? "M89"
+853. Coolant 4 OFF code? "M33"
+854. Coolant 5 OFF code? ""
+855. Coolant 6 OFF code? ""
+856. Coolant 7 OFF code? ""
+857. Coolant 8 OFF code? ""
+858. Coolant 9 OFF code? ""
+859. Coolant 10 OFF code? ""
+
+900. Work shift #1? "G54"
+901. Work shift #2? "G55"
+902. Work shift #3? "G56"
+903. Work shift #4? "G57"
+904. Work shift #5? "G58"
+905. Work shift #6? "G59"
+906. Work shift #7? "G110"
+907. Work shift #8? "G111"
+908. Work shift #9? "G112"
+909. Work shift #10? "G113"
+910. Work shift #11? "G114"
+911. Work shift #12? "G115"
+912. Work shift #13? "G116"
+913. Work shift #14? "G117"
+914. Work shift #15? "G118"
+915. Work shift #16? "G119"
+916. Work shift #17? "G120"
+917. Work shift #18? "G121"
+918. Work shift #19? "G122"
+919. Work shift #20? "G123"
+920. Work shift #21? "G124"
+921. Work shift #22? "G125"
+922. Work shift #23? "G126"
+923. Work shift #24? "G127"
+924. Work shift #25? "G128"
+925. Work shift #26? "G129"
+926. Work shift #27? ""
+927. Work shift #28? ""
+928. Work shift #29? ""
+929. Work shift #30? ""
+930. Work shift #31? ""
+931. Work shift #32? ""
+932. Work shift #33? ""
+933. Work shift #34? ""
+934. Work shift #35? ""
+935. Work shift #36? ""
+936. Work shift #37? ""
+937. Work shift #38? ""
+938. Work shift #39? ""
+939. Work shift #40? ""
+940. Work shift #41? ""
+941. Work shift #42? ""
+942. Work shift #43? ""
+943. Work shift #44? ""
+944. Work shift #45? ""
+945. Work shift #46? ""
+946. Work shift #47? ""
+947. Work shift #48? ""
+948. Work shift #49? ""
+949. Work shift #50? ""
+950. Work shift #51? ""
+951. Work shift #52? ""
+952. Work shift #53? ""
+953. Work shift #54? ""
+954. Work shift #55? ""
+955. Work shift #56? ""
+956. Work shift #57? ""
+957. Work shift #58? ""
+958. Work shift #59? ""
+959. Work shift #60? ""
+960. Work shift #61? ""
+961. Work shift #62? ""
+962. Work shift #63? ""
+963. Work shift #64? ""
+964. Work shift #65? ""
+965. Work shift #66? ""
+966. Work shift #67? ""
+967. Work shift #68? ""
+968. Work shift #69? ""
+969. Work shift #70? ""
+970. Work shift #71? ""
+971. Work shift #72? ""
+972. Work shift #73? ""
+973. Work shift #74? ""
+974. Work shift #75? ""
+975. Work shift #76? ""
+976. Work shift #77? ""
+977. Work shift #78? ""
+978. Work shift #79? ""
+979. Work shift #80? ""
+980. Work shift #81? ""
+981. Work shift #82? ""
+982. Work shift #83? ""
+983. Work shift #84? ""
+984. Work shift #85? ""
+985. Work shift #86? ""
+986. Work shift #87? ""
+987. Work shift #88? ""
+988. Work shift #89? ""
+989. Work shift #90? ""
+990. Work shift #91? ""
+991. Work shift #92? ""
+992. Work shift #93? ""
+993. Work shift #94? ""
+994. Work shift #95? ""
+995. Work shift #96? ""
+996. Work shift #97? ""
+997. Work shift #98? ""
+998. Work shift #99? ""
+999. Work Shift #100? ""
+
+//****************************
+//* PROBE MEASUREMENT BLOCKS *
+//****************************
+
+4000. Probe on
+	n,macro_call,probe_on,probe_print_open
+
+4001. Probe off
+	n,macro_call,probe_off,probe_print_close
+
+4002. End of probe cycle
+	probe_raw_text
+	n,"(END OF PROBE CYCLE)"
+
+4003. Protected move
+	n,macro_call,probe_protected,x_pos,y_pos,z_pos,feed_rate
+
+4004. X Single Surface
+	n,macro_call,probe_x_single,x_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4005. Y Single Surface
+	n,macro_call,probe_y_single,y_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4006. Z Single Surface
+	n,macro_call,probe_z_single,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4007. Web
+	n,macro_call,probe_web,x_pos,y_pos,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4008. Pocket
+	n,macro_call,probe_pocket,x_pos,y_pos,z_pos,probe_experience,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4009. Boss (4 point)
+	n,macro_call,probe_boss_4,probe_b_dia,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4010. Bore (4 point)
+	n,macro_call,probe_bore_4,probe_b_dia,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4011. Boss (3 point)
+	n,macro_call,probe_boss_3,probe_b_dia,probe_angle1,probe_angle2,probe_angle3,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol
+
+4012. Bore (3 point)
+	n,macro_call,probe_bore_3,probe_b_dia,probe_angle1,probe_angle2,probe_angle3,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol
+
+4013. Internal Corner
+	n,macro_call,probe_int_corner,x_pos,y_pos,z_pos,probe_angle_tol,probe_x_dist,probe_y_dist,probe_x_dist2,probe_y_dist2,probe_true_tol,probe_overtravel,probe_work_offset,probe_upper_tol,probe_null_band, probe_print
+
+4014. External Corner
+	n,macro_call,probe_ext_corner,x_pos,y_pos,z_pos,probe_angle_tol,probe_x_dist,probe_y_dist,probe_x_dist2,probe_y_dist2,probe_true_tol,probe_overtravel,probe_work_offset,probe_upper_tol,probe_null_band, probe_print
+
+4015. 5-point Rectangle external
+	n,macro_call,probe_ext_5rect,x_length,y_length,z_pos,5rect_face,probe_angle_tol,5rect_p2_p4_pos,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,5rect_dist,probe_upper_tol,5rect_p1_p3_pos,probe_print
+
+4016. 5-point Rectangle internal
+	n,macro_call,probe_int_5rect,x_length,y_length,z_pos,5rect_face,probe_angle_tol,5rect_p2_p4_pos,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,5rect_dist,probe_upper_tol,5rect_p1_p3_pos,probe_print
+
+4017. Angled Surface in XY Plane
+	n,macro_call,probe_line,probe_angle,probe_dist,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4018. Angled Surface in XYZ Plane
+	n,macro_call,probe_surface,x_pos,y_pos,z_pos,probe_surf_output,probe_feature_tol,probe_true_tol,probe_overtravel,probe_print
+
+4019. Angled web
+	n,macro_call,probe_angled_web,probe_angle,probe_dist,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4020. Angled pocket
+	n,macro_call,probe_angled_pocket,probe_angle,probe_dist,z_pos,probe_experience,probe_feedback,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_work_offset,probe_tool_offset,probe_upper_tol,probe_null_band,probe_print
+
+4021. 4th Axis Measurement (A Axis)
+	n,macro_call,probe_4th_axis,y_dist,z_pos,probe_rotary,probe_overtravel,probe_angle_tol,probe_work_offset,probe_print
+
+4022. 4th Axis Measurement (B Axis)
+	n,macro_call,probe_4th_axis,x_dist,z_pos,probe_rotary,probe_overtravel,probe_angle_tol,probe_work_offset,probe_print
+
+4023. 4th Axis Measurement (C Axis)
+	n,macro_call,probe_4th_axis,x_dist,y_pos,probe_rotary,probe_overtravel,probe_angle_tol,probe_work_offset,probe_print
+
+4024. 4th Axis Measurement (C2 Axis)
+	n,macro_call,probe_4th_axis,x_pos,y_dist,probe_rotary,probe_overtravel,probe_angle_tol,probe_work_offset,probe_print
+
+4025. Boss on PCD
+	n,macro_call,probe_boss_pcd,probe_pcd,probe_b_dia,z_pos,probe_angle,probe_num_features,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_print
+
+4026. Bore on PCD
+	n,macro_call,probe_bore_pcd,probe_pcd,probe_b_dia,z_pos_k,probe_angle,probe_num_features,probe_feature_tol,probe_true_tol,probe_overtravel,probe_inc_distance,probe_print
+
+4027. Stock Allowance
+
+4028. Feature to Feature XY Plane
+
+4029. Feature to Feature Z Plane
+
+4030. SPC Tool Offset
+
+4031. Angle Measure in X
+	n,macro_call,probe_angled_surf,x_pos,probe_dist,probe_angle,z_pos,probe_angle_tol,probe_overtravel,probe_print
+
+4032. Angle Measure in Y 
+	n,macro_call,probe_angled_surf,y_pos,probe_dist,probe_angle,z_pos,probe_angle_tol,probe_overtravel,probe_print
+  
+
+//*******************************
+//* CONTACT TOOL SETTER BLOCKS  *
+//*******************************
+
+4100. CTS Automatic Length
+	n,macro_call,probe_cts_auto_length,probe_cts_tool_type,probe_cts_tool_diameter,probe_cts_tool_tol,probe_cts_length_exper,probe_cts_broken,probe_cts_overtravel,probe_cts_tool_offset,probe_cts_tool_length
+
+4101. CTS Automatic Diameter
+	n,macro_call,probe_cts_auto_diameter,probe_cts_tool_type,probe_cts_tool_diameter,probe_cts_offset_typeA,probe_cts_tool_tol,probe_cts_diam_exper,probe_cts_broken,probe_cts_overtravel,probe_cts_tool_offset,probe_cts_z_clearance,probe_cts_tool_length,probe_cts_z_measure
+
+4102. CTS Automatic Length and Diameter
+	n,macro_call,probe_cts_auto_length_diam,probe_cts_tool_type,probe_cts_tool_diameter,probe_cts_offset_typeA,probe_cts_tool_tol,probe_cts_diam_exper,probe_cts_length_exper,probe_cts_broken,probe_cts_overtravel,probe_cts_tool_offset,probe_cts_z_clearance,probe_cts_tool_length,probe_cts_z_measure
+
+4103. CTS Automatic Length Feed Up
+	n,macro_call,probe_cts_auto_length_up,probe_cts_tool_type,probe_cts_tool_diameter,probe_cts_tool_tol,probe_cts_length_exper,probe_cts_broken,probe_cts_overtravel,probe_cts_tool_offset,probe_cts_inc_radial,probe_cts_tool_length
+
+4104. CTS Broken Tool
+	n,macro_call,probe_cts_broken_tool,probe_cts_tool_diameter,probe_cts_tool_tol,probe_cts_broken,probe_cts_tool_offset,probe_cts_rapid_pos,probe_cts_clearance
+
+4105. CTS Manual Length
+	n,macro_call,probe_cts_manual_length,probe_cts_tool_diameter,probe_cts_tool_offset,probe_cts_overtravel,probe_cts_z_measure,probe_cts_broken,probe_cts_tool_tol
+
+4106. CTS Manual Diameter
+	n,macro_call,probe_cts_manual_diam,probe_cts_tool_diameter,probe_cts_offset_typeA,probe_cts_tool_offset,probe_cts_z_measure,probe_cts_overtravel,probe_cts_broken
+
+4107. CTS Thermal Compensation
+	n,macro_call,probe_cts_thermal_comp,probe_cts_thermal_type,probe_cts_tool_diameter,probe_cts_thermal_x_storage,probe_cts_thermal_y_storage,probe_cts_thermal_z_storage,probe_cts_tool_tol,probe_cts_broken,probe_cts_tool_offset,probe_cts_thermal_measure
+
+//***********************************
+//* NON CONTACT TOOL SETTER BLOCKS  *
+//***********************************
+
+4150. NTS Tool Length
+	n,macro_call,probe_nts_length,probe_nts_solid_tool,probe_nts_tool_type,probe_nts_tool_tol,probe_nts_length_exper,probe_nts_broken,probe_nts_overtravel,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_cutter_edge,probe_nts_stepover
+
+4151. NTS Tool Diameter
+	n,macro_call,probe_nts_diameter,probe_nts_tool_type,probe_nts_diam_offset,probe_nts_diam_tol,probe_nts_step_dist,probe_nts_diam_exper,probe_nts_broken,probe_nts_overtravel,probe_nts_tool_diameter,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_search_dist,probe_nts_measure_z
+
+4152. NTS Tool Length and Diameter
+	n,macro_call,probe_nts_length_diam,probe_nts_tool_type,probe_nts_diam_offset,probe_nts_diam_tol,probe_nts_step_dist,probe_nts_tool_tol,probe_nts_diam_exper,probe_nts_length_exper,probe_nts_broken,probe_nts_overtravel,probe_nts_tool_diameter,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_cutter_edge,probe_nts_stepover,probe_nts_search_dist,probe_nts_measure_z
+
+4153. NTS Cutting Edge Checking
+	n,macro_call,probe_nts_cutting_edge,probe_nts_tool_type,probe_nts_num_edges,probe_nts_runout_tol,probe_nts_broken,probe_nts_overtravel,probe_nts_tool_diameter,probe_nts_spindle_speed,probe_nts_measure_z,probe_nts_search_dist,probe_nts_feed_rev,probe_nts_tool_offset
+
+4154. NTS Broken Tool - Plunge
+	n,macro_call,probe_nts_broken_plunge,probe_nts_tool_tol,probe_nts_broken,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_stepover,probe_nts_safety_z,probe_nts_solid_tool
+
+4155. NTS Broken Tool - Solid Tool
+	n,macro_call,probe_nts_broken_solid,probe_nts_solid_tool,probe_nts_tool_tol,probe_nts_broken,probe_nts_tool_offset,probe_nts_safety_z
+
+4156. NTS Radius Profile Checking
+	n,macro_call,probe_nts_radius_check,probe_nts_tool_type,probe_nts_profile_rad,probe_nts_num_edges,probe_nts_feed_rev,probe_nts_check_height,probe_nts_start_angle,probe_nts_runout_tol,probe_nts_broken,probe_nts_end_angle,probe_nts_tool_diameter,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_linear_dist,probe_nts_radial_dist,probe_nts_safety_z
+
+4157. NTS Linear Profile Checking
+	n,macro_call,probe_nts_linear_check,probe_nts_tool_type,probe_nts_num_edges,probe_nts_feed_rev,probe_nts_check_height,probe_nts_runout_tol,probe_nts_broken,probe_nts_end_angle,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_radial_dist,probe_nts_safety_z
+
+4158. NTS Thermal Compensation
+	n,macro_call,probe_nts_thermal_full,probe_nts_tool_type,probe_nts_work_offset,probe_nts_tool_diameter,probe_nts_tool_length,probe_nts_overtravel,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_stepover
+
+4159. NTS Thermal Compensation - Spindle
+	n,macro_call,probe_nts_thermal_spindle,probe_nts_tool_type,probe_nts_work_offset,probe_nts_tool_length,probe_nts_overtravel,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_stepover
+
+4160. NTS Thermal Compensation - Radial
+	n,macro_call,probe_nts_thermal_radial,probe_nts_tool_type,probe_nts_work_offset,probe_nts_tool_diameter,probe_nts_overtravel,probe_nts_spindle_speed
+	
+4161. NTS Corner radius measurement
+	n,macro_call,probe_nts_corner_measure,probe_nts_tool_type,probe_nts_corner_rad,probe_nts_diam_offset,probe_nts_num_touch,probe_nts_measure_z,probe_nts_diam_exper,probe_nts_broken,probe_nts_overtravel,probe_nts_tool_diameter,probe_nts_spindle_speed,probe_nts_tool_offset,probe_nts_diam_tol,probe_nts_radial_option
+
+//************************************
+//* PROBING CYCLE AND PREFIX STRINGS *
+//************************************
+	
+4200. Macro call code (macro_call)? "G65"
+4201. Probe on command (probe_on)? "P9832"
+4202. Probe off command (probe_off)? "P9833"
+4203. Probe protected move cycle (probe_protected)? "P9810"
+4204. Probe X single surface cycle (probe_x_single)? "P9811"
+4205. Probe Y single surface cycle (probe_y_single)? "P9811"
+4206. Probe Z single surface cycle (probe_z_single)? "P9811"
+4207. Probe Web cycle (probe_web)? "P9812"
+4208. Probe Pocket cycle (probe_pocket)? "P9812"
+4209. Probe Boss 4 point cycle (probe_boss_4)? "P9814"
+4210. Probe Bore 4 point cycle (probe_bore_4)? "P9814"
+4211. Probe Boss 3 point cycle (probe_boss_3)? "P9823"
+4212. Probe Bore 3 point cycle (probe_bore_3)? "P9823"
+4213. Probe internal corner cycle (probe_int_corner)? "P9815"
+4214. Probe external corner cycle (probe_ext_corner)? "P9816"
+4215. Probe external 5 point rectangle cycle (probe_ext_5rect)? "P9817"
+4216. Probe internal 5 point rectangle cycle (probe_int_5rect)? "P9817"
+4217. Probe line (angle single surface with A D inputs) cycle (probe_line)? "P9821"
+4218. Probe 3 point plane (angle surface with XYZ inputs) cycle (probe_surface)? "P9821"
+4219. Probe angled web cycle (probe_angled_web)? "P9822"
+4220. Probe angled pocket cycle (probe_angled_pocket)? "P9822"
+4221. Probe 4th axis cycle (probe_4th_axis)? "P9818"
+4222. Probe 4th axis cycle (Y/B) (probe_4th_axis_2)? "NOT AVAILABLE"
+4223. Probe boss on PCD cycle (probe_boss_pcd)? "P9819"
+4224. Probe bore on PCD cycle (probe_bore_pcd)? "P9819"
+4225. Probe angled surface cycle (probe_angled_surf)? "P9843"
+4226. Probe stock allowance (undefined)? "P9820"
+4227. Probe feature-to-feature in XY (undefined)? "P9834"
+4228. Probe feature-to-feature in Z (undefined)? "P9834"
+4229. Probe update statistical process control (SPC) (undefined)? "P9835"
+4230. Probe storing multi-stylus data (undefined)? "NOT AVAILABLE"
+4231. Probe loading multi-stylus data (undefined)? "NOT AVAILABLE"
+4232. Probe optimizing probe cycle (undefined)? "NOT AVAILABLE"
+
+
+4250. Prefix for x position in probing (x_pos)? "X"
+4251. Prefix for y position in probing (y_pos)? "Y"
+4252. Prefix for z position in probing (z_pos)? "Z"
+4253. Prefix for bore and boss diameter parameter (probe_b_dia)? "D"
+4254. Prefix for probe angle parameter (probe_angle)? "A"
+4255. Prefix for probe bore/boss first angle parameter (probe_angle1)? "A"
+4256. Prefix for probe bore/boss second angle parameter (probe_angle2)? "B"
+4257. Prefix for probe bore/boss third angle parameter (probe_angle3)? "C"
+4258. Prefix for probe distance parameter  (probe_dist)? "D"
+4259. Prefix for X distance parameter in corner probing (probe_x_dist)? "D"
+4260. Prefix for Y distance parameter in corner probing (probe_y_dist)? "E"
+4261. Prefix for second X distance parameter in corner probing (probe_x_dist2)? "I"
+4262. Prefix for second Y distance parameter in corner probing (probe_y_dist2)? "J"
+4263. Prefix for X distance parameter used in 4th axis probing (x_dist)? "X"
+4264. Prefix for Y distance parameter used in 4th axis probing (y_dist)? "Y"
+4265. Prefix for X length parameter used in rectangle probing (x_length)? "D"
+4266. Prefix for y length parameter used in rectangle probing (y_length)? "E"
+4267. Prefix for z measure position parameter in Bore PCD (z_pos_k)? "K"
+4268. Prefix for face for 2 measurements parameter in rectangle probing (5rect_face)? "A"
+4269. Prefix for P2 and P4 measure position parameter in rectangle probing (5rect_p2_p4_pos)? "H"
+4270. Prefix for distance between 2 points in rectangle probing (5rect_dist)? "T"
+4271. Prefix for second distance parameter in rectangle probing (5rect_p1_p3_pos)? "V"
+4272. Prefix for probe surface output parameter (probe_surf_output)? "C"
+4273. Prefix for 4th axis probing type parameter (probe_rotary)? "K"
+4274. Prefix for the pitch circle diameter parameter in Boss/Bore PCD (probe_pcd)? "C"
+4275. Prefix for the number of features parameter in Boss/Bore PCD (probe_num_features)? "B"
+4276. Prefix for the angle tolerance parameter in probing (probe_angle_tol)? "B"
+4277. Prefix for the experience value parameter in probing (probe_experience)? "E"
+4278. Prefix for the feedback parameter in probing (probe_feedback)? "F"
+4279. Prefix for the feature tolerance value in probing (probe_feature_tol)? "H"
+4280. Prefix for the true tolerance value in probing (probe_true_tol)? "M"
+4281. Prefix for the overtravel parameter in probing (probe_overtravel)? "Q"
+4282. Prefix for the incremental distance parameter in probing (probe_inc_distance)? "R"
+4283. Prefix for the work offset parameter in probing (probe_work_offset)? "S"
+4284. Prefix for the tool offset parameter in probing (probe_tool_offset)? "T"
+4285. Prefix for the upper tolerance limit parameter in probing (probe_upper_tol)? "U"
+4286. Prefix for the null band parameter in probing (probe_null_band)? "V"
+4287. Prefix for the print parameter in probing (probe_print)? "W"
+4288. Command for opening the print port (probe_print_open)? "W1."
+4289. Command for closing the print port (probe_print_close)? "W1."
+
+//*******************************************
+//* CONTACT TOOL SETTER CYCLES AND PREFIXES *
+//*******************************************
+   
+4400. Contact tool setter automatic length cycle (probe_cts_auto_length)? 						"P9857"
+4401. Contact tool setter automatic diameter cycle (probe_cts_auto_diameter)? 					"P9857"
+4402. Contact tool setter automatic length and diameter cycle (probe_cts_auto_length_diam)? 	"P9857"
+4403. Contact tool setter automatic length up cut cycle (probe_cts_auto_length_up)? 			"P9857"
+4404. Contact tool setter broken tool cycle (probe_cts_broken_tool)? 							"P9858"
+4405. Contact tool setter manual length cycle (probe_cts_manual_length)? 						"P9856"
+4406. Contact tool setter manual diameter cycle (probe_cts_manual_diam)? 						"P9852"
+4407. Contact tool setter thermal compensation cycle (probe_cts_thermal_comp)? 					"P9859"
+
+
+4420. Prefix for CTS measurement type parameter (probe_cts_tool_type)? 									"B"
+4421. Prefix for CTS tool diameter (rotating) parameter (probe_cts_tool_diameter)? 						"D"
+4422. Prefix for CTS tool length tolerance value parameter (probe_cts_tool_tol)? 						"H"
+4423. Prefix for CTS length experience parameter (probe_cts_length_exper)? 								"K"
+4424. Prefix for CTS tool out of the tolerance parameter (probe_cts_broken)? 							"M"
+4425. Prefix for CTS overtravel parameter (probe_cts_overtravel)? 										"Q"
+4426. Prefix for CTS tool offset parameter (probe_cts_tool_offset)? 									"T"
+4427. Prefix for CTS tool length parameter (probe_cts_tool_length)? 									"Y"
+4428. Prefix for CTS tool offset parameter for Type A offset tables (probe_cts_offset_typeA)? 			"E"
+4429. Prefix for CTS diameter experience parameter (probe_cts_diam_exper)? 								"J"
+4430. Prefix for CTS extra Z clearance parameter (probe_cts_z_clearance)? 								"W"
+4431. Prefix for CTS Z measure position parameter (probe_cts_z_measure)? 								"Z"
+4432. Prefix for CTS for incremental radial distance parameter in upfeed cycle (probe_cts_inc_radial)? 	"U"
+4433. Prefix for CTS rapid position parameter in broken tool cycle (probe_cts_rapid_pos)? 				"Y"
+4434. Prefix for CTS clearance position parameter in broken tool cycle (probe_cts_clearance)? 			"Z"
+4435. Prefix for CTS thermal comp cycle type parameter (probe_cts_thermal_type)? 						"C"
+4436. Prefix for CTS thermal comp measure position parameter (probe_cts_thermal_measure)? 				"W"
+4437. Prefix for CTS thermal comp x storage location parameter (probe_cts_thermal_x_storage)? 			"X"
+4438. Prefix for CTS thermal comp y storage location parameter (probe_cts_thermal_y_storage)? 			"Y"
+4439. Prefix for CTS thermal comp z storage location parameter (probe_cts_thermal_z_storage)? 			"Z"
+4440. Prefix for CTS overtravel distance and radial clearance(probe_cts_overtravel_radial)? 			"R"
+
+//*******************************************
+//* NON-CONTACT TOOL SETTER CYCLES AND PREFIXES *
+//*******************************************
+
+4500. Non-contact tool setter tool length cycle (probe_nts_length)? 						"P9862"
+4501. Non-contact tool setter tool diameter cycle (probe_nts_diameter)? 					"P9862"
+4502. Non-contact tool setter tool length and diameter (probe_nts_length_diam)? 			"P9862"
+4503. Non-contact tool setter cutting edge checking (probe_nts_cutting_edge)? 				"P9862"
+4504. Non-contact tool setter broken tool - plunge (probe_nts_broken_plunge)? 				"P9863"
+4505. Non-contact tool setter broken tool - solid tool (probe_nts_broken_solid)? 			"P9866"
+4506. Non-contact tool setter radius profile checking (probe_nts_radius_check)? 			"P9865"
+4507. Non-contact tool setter linear profile checking (probe_nts_linear_check)? 			"P9865"
+4508. Non-contact tool setter full thermal compensation (probe_nts_thermal_full)? 			"P9861"
+4509. Non-contact tool setter spindle thermal compensation (probe_nts_thermal_spindle)? 	"P9861"
+4510. Non-contact tool setter radial thermal compensation (probe_nts_thermal_radial)? 		"P9861"
+4511. Non-contact tool setter corner radius measure cycle (probe_nts_corner_measure)?		"P9867"
+
+
+4550. Prefix for NTS measurement type parameter (probe_nts_tool_type)? 						"B"
+4551. Prefix for NTS tool length tolerance value parameter (probe_nts_tool_tol)? 			"H"
+4552. Prefix for NTS length experience parameter (probe_nts_length_exper)? 					"J"
+4553. Prefix for NTS tool out of the tolerance parameter (probe_nts_broken)? 				"M"
+4554. Prefix for NTS overtravel parameter (probe_nts_overtravel)? 							"Q"
+4555. Prefix for NTS spindle speed parameter (probe_nts_spindle_speed)? 					"S"
+4556. Prefix for NTS tool offset parameter (probe_nts_tool_offset)? 						"T"
+4557. Prefix for NTS radial step-over parameter (probe_nts_stepover)? 						"Y"
+4558. Prefix for NTS solid tool parameter (probe_nts_solid_tool)? 							"A"
+4559. Prefix for NTS cutter edge parameter (probe_nts_cutter_edge)? 						"W"
+4560. Prefix for NTS diameter offset number parameter (probe_nts_diam_offset)? 				"D"
+4561. Prefix for NTS diameter tolerance parameter (probe_nts_diam_tol)? 					"E"
+4562. Prefix for NTS step distance for radial measure parameter (probe_nts_step_dist)? 		"F"
+4563. Prefix for NTS radius/diameter experience parameter (probe_nts_diam_exper)? 			"I"
+4564. Prefix for NTS tool diameter parameter (probe_nts_tool_diameter)? 					"R"
+4565. Prefix for NTS search distance for high spot parameter (probe_nts_search_dist)? 		"X"
+4566. Prefix for NTS measure height parameter (probe_nts_measure_z)? 						"Z"
+4567. Prefix for NTS number of cutting edges parameter (probe_nts_num_edges)? 				"C"
+4568. Prefix for NTS feed per rev parameter (probe_nts_feed_rev)? 							"F"
+4569. Prefix for NTS run-out tolerance parameter (probe_nts_runout_tol)? 					"K"
+4570. Prefix for NTS safety plane parameter (probe_nts_safety_z)? 							"Z"
+4571. Prefix for NTS start angle for profile checking parameter (probe_nts_start_angle)? 	"J"
+4572. Prefix for NTS end angle for profile checking parameter (probe_nts_end_angle)? 		"Q"
+4573. Prefix for NTS profile checking height parameter (probe_nts_check_height)? 			"H"
+4574. Prefix for NTS profile checking linear distance parameter (probe_nts_linear_dist)? 	"X"
+4575. Prefix for NTS profile checking radial distance parameter (probe_nts_radial_dist)? 	"Y"
+4576. Prefix for NTS work offset in thermal checking parameter (probe_nts_work_offset)? 	"C"
+4577. Prefix for NTS tool length in thermal checking parameter (probe_nts_tool_length)? 	"K"
+4578. Prefix for NTS corner radius parameter (probe_nts_corner_rad)?						"C"
+4579. Prefix for NTS corner measure number of touches parameter (probe_nts_num_touch)?		"F"
+4580. Prefix for NTS corner measure radial measure option parameter (probe_nts_radial_option)? "V"
+4581. Prefix for NTS profile radius parameter (probe_nts_profile_rad)?						"R"
+
+//*******************************************
+//* POST QUESTIONS RELATED TO PROBING OUTPUT *
+//*******************************************
+
+4700. Angle output mode for probing (0= -180/+180; 1= 0-360; 2= any)? 0
+
+2001. Program Block 1.
+
+	msgbox("Hello" & vbCrLf & "World")
+
+2002. Program Block 2.
+
+2003. Program Block 3.
+
+2004. Program Block 4.
+
+2005. Program Block 5.
+
+2006. Program Block 6.
+
+2007. Program Block 7.
+
+2008. Program Block 8.
+
+2009. Program Block 9.
+
+2010. Program Block 10.
+
+2011. Program Block 11.
+
+2012. Program Block 12.
+
+2013. Program Block 13.
+
+2014. Program Block 14.
+
+2015. Program Block 15.
+
+2016. Program Block 16.
+
+2017. Program Block 17.
+
+2018. Program Block 18.
+
+2019. Program Block 19.
+
+2020. Program Block 20.
+
+2021. Program Block 21.
+
+2022. Program Block 22.
+
+2023. Program Block 23.
+
+2024. Program Block 24.
+
+2025. Program Block 25.
+
+2026. Program Block 26.
+
+2027. Program Block 27.
+
+2028. Program Block 28.
+
+2029. Program Block 29.
+
+2030. Program Block 30.
+
+2031. Program Block 31.
+
+2032. Program Block 32.
+
+2033. Program Block 33.
+
+2034. Program Block 34.
+
+2035. Program Block 35.
+
+2036. Program Block 36.
+
+2037. Program Block 37.
+
+2038. Program Block 38.
+
+2039. Program Block 39.
+
+2040. Program Block 40.
+
+2041. Program Block 41.
+
+2042. Program Block 42.
+
+2043. Program Block 43.
+
+2044. Program Block 44.
+
+2045. Program Block 45.
+
+2046. Program Block 46.
+
+2047. Program Block 47.
+
+2048. Program Block 48.
+
+2049. Program Block 49.
+
+2050. Program Block 50.
+
+2051. Program Block 51.
+
+2052. Program Block 52.
+
+2053. Program Block 53.
+
+2054. Program Block 54.
+
+2055. Program Block 55.
+
+2056. Program Block 56.
+
+2057. Program Block 57.
+
+2058. Program Block 58.
+
+2059. Program Block 59.
+
+2060. Program Block 60.
+
+2061. Program Block 61.
+
+2062. Program Block 62.
+
+2063. Program Block 63.
+
+2064. Program Block 64.
+
+2065. Program Block 65.
+
+2066. Program Block 66.
+
+2067. Program Block 67.
+
+2068. Program Block 68.
+
+2069. Program Block 69.
+
+2070. Program Block 70.
+
+2071. Program Block 71.
+
+2072. Program Block 72.
+
+2073. Program Block 73.
+
+2074. Program Block 74.
+
+2075. Program Block 75.
+
+2076. Program Block 76.
+
+2077. Program Block 77.
+
+2078. Program Block 78.
+
+2079. Program Block 79.
+
+2080. Program Block 80.
+
+2081. Program Block 81.
+
+2082. Program Block 82.
+
+2083. Program Block 83.
+
+2084. Program Block 84.
+
+2085. Program Block 85.
+
+2086. Program Block 86.
+
+2087. Program Block 87.
+
+2088. Program Block 88.
+
+2089. Program Block 89.
+
+2090. Program Block 90.
+
+2091. Program Block 91.
+
+2092. Program Block 92.
+
+2093. Program Block 93.
+
+2094. Program Block 94.
+
+2095. Program Block 95.
+
+2096. Program Block 96.
+
+2097. Program Block 97.
+
+2098. Program Block 98.
+
+2099. Program Block 99.
+
+2101. Read Entire File After Posting.
+
+2102. Read each Line on Output.
+
+2701. Lua Block 1.
+	// Test
+
+	local xVal = 1.0
+	local yVal = 2.0
+
+	myTable = {
+		key1 = value1,
+		key2 = "Hello"
+	}
+
+	local function myLocalFunc(args)
+		code
+	end
+
+	Bcc.ShowMessageBox("THIS IS A TEST\n".."X"..xVal.."\nY"..yVal)
+
+	BcPost.ProcessPostLine("'(',n,rapid_move_forced, 'X"..xVal.."','Y"..yVal..")'")
+
+
+2702. Lua Block 2.
+	
+
+2703. Lua Block 3.
+	

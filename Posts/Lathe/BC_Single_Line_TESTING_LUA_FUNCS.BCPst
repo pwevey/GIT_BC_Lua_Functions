@@ -226,7 +226,9 @@
 1087. Start of thread (G76) cycle
 	// lua_block_1
 	n,'G76',thread_x2,thread_z2,taper_height,thread_first_cut,thread_angle_in
-	lua_func_ThreadsPerInch("U")
+	lua_func_ThreadsPerInch("U") // Output: U20
+	lua_func_ThreadsPerInch("U", true) // Output: U20.
+	
 1088. End of thread (G76) cycle
 
 1089. Start of thread (G33) cycle
@@ -303,6 +305,8 @@
 
 1126. Peck drill canned cycle
 	n,g_canned_cycle,x_f,drill_depth,reference_plane,peck_drill_increment,dwell,canned_feed_rate
+	lua_func_IfDwellOutput("P") // Output: P10
+	lua_func_IfDwellOutput("P", true) // if true in second arg, includeDotAfterInt Output: P10. 
 
 1127. Tapping canned cycle
 	rigid_tapping_start

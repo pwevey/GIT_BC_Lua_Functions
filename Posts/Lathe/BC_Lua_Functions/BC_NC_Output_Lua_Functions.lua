@@ -213,6 +213,26 @@ local degrees = convertAngle(radians, "radiansToDegrees")  -- Outputs: 180
 print(degrees)
 ]]
 
+--[[
+    Include a dot after the integer numbers
+    args:
+        num: The number to be formatted
+        includeDotAfterInt: (true or false) Whether to include a dot after the integer part of the number
+    returns:
+        The number with a dot after the integer part if includeDotAfterInt is true
+]]
+function includeDotAfterNum(num, includeDotAfterInt)
+    -- Convert num to a string
+    local num = tostring(num)
+
+    -- If includeDotAfterInt is true and num is a whole number, add a dot after the integer part of num
+    if includeDotAfterInt and num == tostring(math.floor(num)) then
+        num = num .. "."
+    end
+
+    return num
+end
+
 
 
 --[[
@@ -284,6 +304,7 @@ end
     Convert a pitch value to threads per inch for the Lathe Thread Operation
     args:
         prefix: The prefix to be used in the threads per inch value
+        includeDotAfterInt: (true or false) Whether to include a dot after the integer part of the value
     Returns:
         The threads per inch value with a prefix rounded to the nearest whole number
     Set in Post Processor:
@@ -292,7 +313,7 @@ end
     Used for Post Blocks:
         1087 (Start of thread (G76) cycle)
 ]]
-function ThreadsPerInch(prefix)
+function ThreadsPerInch(prefix, includeDotAfterInt)
 
     local pitch = GetValueFromOperation("thread_pitch")
 
@@ -303,7 +324,9 @@ function ThreadsPerInch(prefix)
     end
 
 
-    local threads_per_inch = prefix .. round(1 / pitch, 0)
+    local threads_per_inch = round(1 / pitch, 0)
+    threads_per_inch = includeDotAfterNum(threads_per_inch, includeDotAfterInt)
+    threads_per_inch = prefix .. threads_per_inch
     -- Bcc.ShowMessageBox(threads_per_inch)
 
     return threads_per_inch
@@ -336,6 +359,7 @@ end
     have a separate dwell post block
     args:
         prefix: The prefix to be used in the dwell value
+        includeDotAfterInt: (true or false) Whether to include a dot after the integer part of the value
     Returns:
         The dwell value with a prefix if dwell exists, otherwise nil
     Set in Post Processor:
@@ -346,10 +370,15 @@ end
         83. Peck drill canned cycle
         Any other post block that uses a 'dwell' post variable
 ]]
-function IfDwellOutput(prefix)
+function IfDwellOutput(prefix, includeDotAfterInt)
     local dwell = round(BcPost.RunVBApi("MILL_GetDwell"), 4)
 
+    if dwell == 0 then
+        dwell = round(BcPost.RunVBApi("LATHE_GetDrillDwell"), 4)
+    end
+
     if dwell ~= 0 then
+        dwell = includeDotAfterNum(dwell, includeDotAfterInt)
         dwell = prefix .. dwell
         return dwell
     end
