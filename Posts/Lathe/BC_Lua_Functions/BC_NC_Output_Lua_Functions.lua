@@ -91,9 +91,9 @@ function formatNumber(args)
 
     -- Apply the multiplier, addition, subtraction, and division
     num = num * multiplier
+    num = num / divide
     num = num + add
     num = num - subtract
-    num = num / divide
 
     -- Round to the specified number of decimal places
     local mult = 10^(numDecimalPlaces or 0)
