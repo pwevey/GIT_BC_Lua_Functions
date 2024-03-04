@@ -1,5 +1,7 @@
 # Repository Overview
 
+NOTE: Most Lua Functions and stored in the Lathe directory. These can be used for Mill or MillTurn as well.
+
 This repository contains a library of functions used with BobCAD-CAM Post Processors. 
 The scripts are written in Lua and are organized based on the machine type. 
 
