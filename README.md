@@ -38,11 +38,15 @@ To use these lua functions, do the following:
 
     eg. create a folder called, "BC_Lua_Functions" 
 
-3. Add the following Post Question to your Post Processor and use the name of the folder you just created
+3. Place the Lua files from this Github repository in the newly created local folder
+
+eg. place in C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions
+
+4. Add the following Post Question to your Post Processor and use the name of the folder you just created
 
     732\. Lua sub folder? "BC_Lua_Functions" 
 
-4. You can now use the lua functions through out the Post Processor. 
+5. You can now use the lua functions through out the Post Processor. 
 
 Two main ways:
 
