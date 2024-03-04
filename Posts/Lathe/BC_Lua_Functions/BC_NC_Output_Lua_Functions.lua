@@ -1,6 +1,7 @@
 --[[
     TODO: Evaluate ThreadsPerInch(prefix) so that you can place the lua_func_ on the same line as of post variables
             Link: https://bobcad.atlassian.net/servicedesk/customer/portal/3/BIT-864
+            TODO: Should automatically add spaces just before and after the return value of the functions
 ]]
 
 --[[
@@ -50,10 +51,17 @@ end
     Dependencies:
         This function does NOT depend on other lua functions in this file
 ]]
+-- Define a global flag for the error message
+formatNumberErrorMessageShown = false
+
 function formatNumber(args)
     -- Check if num parameter is provided
     if args.num == nil then
-        Bcc.ShowMessageBox("Error: 'num' parameter is missing or not a number (formatNumber lua function). \nMake sure you provide the num parameter. \n\neg. lua_func_formatNumber({num = -1234.5678, numDecimalPlaces = 2})", {Title="formatNumber function Error"})
+        -- Only show the error message if it hasn't been shown before
+        if not formatNumberErrorMessageShown then
+            Bcc.ShowMessageBox("Error: 'num' parameter is missing or not a number (formatNumber lua function). \nMake sure you provide the num parameter. \n\neg. lua_func_formatNumber({num = -1234.5678, numDecimalPlaces = 2})", {Title="formatNumber function Error"})
+            formatNumberErrorMessageShown = true
+        end
         return
     end
     
@@ -211,7 +219,8 @@ print(formatNumber({includeDotAfterInt = false})) -- Outputs: Error, no num para
         numDecimalPlaces: (Optional) The number of decimal places to round to. Default is no rounding.
     returns:
         The converted angle
-
+    Dependencies:
+        round: to round the result to the specified number of decimal places       
 ]]
 function convertAngle(angle, mode, numDecimalPlaces)
     local pi = math.pi
@@ -225,8 +234,7 @@ function convertAngle(angle, mode, numDecimalPlaces)
     end
 
     if numDecimalPlaces then
-        local mult = 10.0 ^ numDecimalPlaces
-        return math.floor(result * mult + 0.5) / mult
+        return round(result, numDecimalPlaces)
     else
         return result
     end
@@ -337,7 +345,8 @@ end
     Convert a pitch value to threads per inch for the Lathe Thread Operation
     args:
         prefix: The prefix to be used in the threads per inch value
-        includeDotAfterInt: (true or false) Whether to include a dot after the integer part of the value
+        includeDotAfterInt: (Optional) (true or false) Whether to include a dot after the integer part of the value
+        numDecimalPlaces: (Optional) The number of decimal places to round the threads per inch value to. Default is 4.
     Returns:
         The threads per inch value with a prefix rounded to the nearest whole number
     Set in Post Processor:
@@ -351,18 +360,24 @@ end
         - round: to round the threads per inch value to the nearest whole number
         - includeDotAfterNum: to optionally add a dot after the integer part of the threads per inch value
 ]]
-function ThreadsPerInch(prefix, includeDotAfterInt)
+threadsPerInchErrorMessageShown = false
+function ThreadsPerInch(prefix, includeDotAfterInt, numDecimalPlaces)
 
     local pitch = GetValueFromOperation("thread_pitch")
 
     if pitch then
         -- Bcc.ShowMessageBox(searchKey .. ": " .. tostring(pitch), {Title="Value from Toolpath Operation"})
     else
-        Bcc.ShowMessageBox("Key or subkey not found. This function is meant for a lathe thread operation.", {Title="ThreadsPerInch(prefix) Function Error"})
+        if not threadsPerInchErrorMessageShown then
+            Bcc.ShowMessageBox("Key or subkey not found. This function is meant for a lathe thread operation.", {Title="ThreadsPerInch(prefix) Function Error"})
+            threadsPerInchErrorMessageShown = true
+        end
+        return
     end
 
+    numDecimalPlaces = numDecimalPlaces or 4
 
-    local threads_per_inch = round(1 / pitch, 0)
+    local threads_per_inch = round(1 / pitch, numDecimalPlaces)
     threads_per_inch = includeDotAfterNum(threads_per_inch, includeDotAfterInt)
     threads_per_inch = prefix .. threads_per_inch
     -- Bcc.ShowMessageBox(threads_per_inch)
@@ -389,6 +404,51 @@ function RadiusIArcMoveBlock1025()
 	-- Bcc.ShowMessageBox("ArcIvalue: " .. ArcIvalue ..  "\nArcKvalue: " .. ArcKvalue, {Title="Arc Center Values"})
 
 	BcPost.ProcessPostLine("n,g_arc_move,x_f,z_f,'"..arc_i_value.."','"..arc_k_value.."',feed_rate")
+end
+
+
+--[[
+    Outputs the arc center I and K (Or other specified prefix) values for the Lathe Arc Move post block
+    args:
+        prefixI: The prefix to be used in the I value
+        prefixK: The prefix to be used in the K value
+        numDecimalPlaces: (Optional) The number of decimal places to round the I and K values to. Default is 4.
+    Returns:
+        The I and K (Or other specified prefix) values for the Lathe Arc Move post block
+    Set in Post Processor:
+        Use lua_func_ArcCenterXToRadius("I", "K")
+        Example Post Block Line: n,g_arc_move,x_f,z_f,lua_func_ArcCenterXToRadius("I", "K"),feed_rate
+    Used for Post Blocks:
+        1025 (Arc move (Lathe))
+    Dependencies:
+        This function calls the following functions within this file:
+        - round: to round the I and K values to 4 decimal places
+]]
+-- Define a global flag for the error message
+ArcCenterXToRadiuserrorMessageShown = false
+
+function ArcCenterXToRadius(prefixI, prefixK, numDecimalPlaces)
+    if tonumber(prefixI) or tonumber(prefixK) then
+        if not ArcCenterXToRadiuserrorMessageShown then
+            Bcc.ShowMessageBox("Error: 'prefixI' or 'prefixK' parameter is a number (ArcCenterToRadius lua function). \nMake sure you provide both prefix parameters as strings. \n\neg. ArcCenterToRadius(\"I\", \"K\", 4)", {Title="ArcCenterToRadius function Error"})
+            ArcCenterXToRadiuserrorMessageShown = true
+        end
+        return
+    end
+
+    if not prefixI or not prefixK then
+        if not ArcCenterXToRadiuserrorMessageShown then
+            Bcc.ShowMessageBox("Error: 'prefixI' or 'prefixK' parameter is missing (ArcCenterToRadius lua function). \nMake sure you provide both prefix parameters. \n\neg. ArcCenterToRadius(\"I\", \"K\")", {Title="ArcCenterToRadius function Error"})
+            ArcCenterXToRadiuserrorMessageShown = true
+        end
+        return
+    end
+
+    numDecimalPlaces = numDecimalPlaces or 4
+
+    local arc_i_value = prefixI .. round(BcPost.RunVBApi("LATHE_GetArcCenterX"), numDecimalPlaces)
+    local arc_k_value = prefixK .. round(BcPost.RunVBApi("LATHE_GetArcCenterZ"), numDecimalPlaces)
+    return arc_i_value .. " " .. arc_k_value
 end
 
 

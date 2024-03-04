@@ -52,12 +52,28 @@
 	// lua_func_formatNumber({num = 24.5, includeDotAfterInt = false})
 	lua_func_formatNumber({num = "MILL_GetXRapid", prefix = "X", numDecimalPlaces = 1 , includeDotAfterInt = false}) // Outputs: X2.3
 	lua_func_formatNumber({num = "MILL_GetXRapid", numDecimalPlaces = 1 , includeDotAfterInt = false}) // Outputs: 2.3
-	lua_func_formatNumber({num = "MILL_GetXRapid", numDecimalPlaces = 1 , includeDotAfterInt = false, multiplier = 100}) // Outputs: 225
+	lua_func_formatNumber({num = "MILL_GetXRapid", numDecimalPlaces = 1 , includeDotAfterInt = false, multiply = 100}) // Outputs: 225
 	lua_func_formatNumber({num = BcPost.RunVBApi("MILL_GetXRapid"), prefix = "YES?", numDecimalPlaces = 1 , includeDotAfterInt = false}) // Outputs: YES?2.3
 	lua_func_formatNumber({num = -1023.35, prefix = "TEST", numDecimalPlaces = 1 , includeDotAfterInt = false, includeLeadingZero = false, useThousandsSeparator = false}) // Outputs: TEST-1023.4
 	lua_func_formatNumber({num = 24.3, includeDotAfterInt = false}) // Outputs: 24
 	lua_func_formatNumber({num = 24.3, prefix = "F", includeDotAfterInt = false}) // Outputs: F24
-	lua_func_convertAngle(180, "degreesToRadians")
+	lua_func_convertAngle(180, "degreesToRadians") // Outputs: 3.14159265358979
+	lua_func_convertAngle(180, "degreesToRadians", 4) // Outputs: 3.1416
+	" "
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 3 , multiply = 20}) // Multiply - Outputs: -4.691
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 3 , divide = 20}) // Divide - Outputs: -0.012
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 3 , add = 20}) // Add - Outputs: 19.765
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 3 , subtract = 20}) // Subtract - Outputs: -20.235
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 3 , add = 0.23456}) // Subtract - Outputs: 0.
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 3 , add = 0.23456, includeDotAfterInt = false}) // Add - Outputs: 0
+	" "
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 3 , divide = 20, includeLeadingZero = false}) // Divide - Outputs: -.012
+	lua_func_formatNumber({num = -0.23456, numDecimalPlaces = 4 , subtract = 20, prefix = "T"}) // Subtract - Outputs: -20.2346
+	" "
+	lua_func_round(-0.23456, 3) // Outputs: -0.235
+	lua_func_round(0.23456, 3) // Outputs: 0.235
+	lua_func_round(BcPost.RunVBApi("MILL_GetXRapid"), 1) // Outputs: 2.3
+	" "
 	comment1
 	start_comment,comment2,end_comment
 	"(Operation Note Section -----------)"
@@ -149,7 +165,13 @@
 1025. Arc move
 	// lua_block_2
 	// n,g_arc_move,x_f,z_f,arc_center,feed_rate
-	lua_func_RadiusIArcMoveBlock1025
+	
+	// lua_func_RadiusIArcMoveBlock1025 // Output: The whole post block rounded to 4 decimal places
+
+	n,g_arc_move,x_f,z_f,arc_center,feed_rate
+	lua_func_ArcCenterXToRadius("I", "K", 5)
+	lua_func_ArcCenterXToRadius("I", "K")
+	lua_func_ArcCenterXToRadius("I", 4) // Output: Error Message, prefix is a number
 
 26. Set debug
 	debug_on
@@ -228,6 +250,7 @@
 	n,'G76',thread_x2,thread_z2,taper_height,thread_first_cut,thread_angle_in
 	lua_func_ThreadsPerInch("U") // Output: U20
 	lua_func_ThreadsPerInch("U", true) // Output: U20.
+	lua_func_ThreadsPerInch("U", true, 2) // Output: U18.52 (if 18.5185)
 
 1088. End of thread (G76) cycle
 
