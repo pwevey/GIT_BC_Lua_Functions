@@ -40,7 +40,7 @@ To use these lua functions, do the following:
 
 3. Place the Lua files from this Github repository in the newly created local folder
 
-eg. place in C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions
+    eg. place in C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions
 
 4. Add the following Post Question to your Post Processor and use the name of the folder you just created
 
