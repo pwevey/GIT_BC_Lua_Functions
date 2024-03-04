@@ -116,15 +116,13 @@ end
 
 --[[
 -- Call the create functions
-createCheckBox({setPosition = 1, assignCheckBoxLabel = "Use Tool Changer", setDefaultToOnOff = 1})
-createComboBox({setPosition = 1, assignComboBoxLabel = "ComboBox Label 1", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
-createComboBox({setPosition = 3, assignComboBoxLabel = "ComboBox Label 2", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
-createIntegerEditBox({setPosition = 1, assignEditBoxLabel = "Integer Edit Box", setDefaultIntegerNumber = 10})
-createRealEditBox({setPosition = 2, assignEditBoxLabel = "Real Edit Box", setDefaultDecimalNumber = 1.23})
-createStringEditBox({setPosition = 3, assignEditBoxLabel = "String Edit Box", setDefaultStringText = "Default Text"})
+CreateCheckBox({setPosition = 1, assignCheckBoxLabel = "Use Tool Changer", setDefaultToOnOff = 1})
+CreateComboBox({setPosition = 1, assignComboBoxLabel = "ComboBox Label 1", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
+CreateComboBox({setPosition = 3, assignComboBoxLabel = "ComboBox Label 2", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
+CreateIntegerEditBox({setPosition = 1, assignEditBoxLabel = "Integer Edit Box", setDefaultIntegerNumber = 10})
+CreateRealEditBox({setPosition = 2, assignEditBoxLabel = "Real Edit Box", setDefaultDecimalNumber = 1.23})
+CreateStringEditBox({setPosition = 3, assignEditBoxLabel = "String Edit Box", setDefaultStringText = "Default Text"})
 ]]
 
 -- Finalize the output
--- M.finalize()
-
--- return M -- Return the module table
+-- FinalizeAdvPostingPage({postProcessorName = "BC_Single_Line_TESTING_LUA_FUNCS", extension = "CustomSettings", jobType = "Lathe"})
