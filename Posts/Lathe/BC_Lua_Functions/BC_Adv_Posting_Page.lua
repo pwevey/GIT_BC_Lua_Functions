@@ -1,9 +1,9 @@
 local function createCheckBox(args)
     local codeBlock = [[
-        
-************ CHECK BOXES ************
+************ CHECK BOX ************
 CHECK_BOX,%s,%s
 DEFAULT_CHECK,%s,%s
+
 ]]
     return string.format(codeBlock, args.setPosition, args.assignCheckBoxLabel, args.setPosition, args.setDefaultToOnOff)
 end
@@ -12,11 +12,11 @@ end
 local function createComboBox(args)
     local choices = table.concat(args.assignChoiceLabels, ",")
     local codeBlock = [[
-        
-************ COMBO BOXES ************
+************ COMBO BOX ************
 COMBO_BOX,%s,%s
 TEXT_LABEL,%s,%s
 DEFAULT_COMBO_INDEX,%s,%s
+
 ]]
     return string.format(codeBlock, args.setPosition, choices, args.setPosition, args.assignComboBoxLabel, args.setPosition, args.setDefaultSelection)
 end
@@ -24,11 +24,11 @@ end
 
 local function createIntegerEditBox(args)
     local codeBlock = [[
-
-************ EDIT BOXES ************
+************ EDIT BOX WHOLE NUMBER ************
 EDIT_BOX,%d,INTEGER
 TEXT_LABEL,%d,%s
 DEFAULT_INTEGER,%d,%d
+
 ]]
     return string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultIntegerNumber)
 end
@@ -36,11 +36,11 @@ end
 
 local function createRealEditBox(args)
     local codeBlock = [[
-
-************ EDIT BOXES ************
+************ EDIT BOX DECIMAL NUMBER ************
 EDIT_BOX,%d,REAL
 TEXT_LABEL,%d,%s
 DEFAULT_REAL,%d,%f
+
 ]]
     return string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultDecimalNumber)
 end
@@ -48,11 +48,11 @@ end
 
 local function createStringEditBox(args)
     local codeBlock = [[
-
-************ EDIT BOXES ************
+************ EDIT BOX TEXT ************
 EDIT_BOX,%d,STRING
 TEXT_LABEL,%d,%s
 DEFAULT_STRING,%d,%s
+
 ]]
     return string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultStringText)
 end
