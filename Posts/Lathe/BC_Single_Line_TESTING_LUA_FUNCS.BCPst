@@ -47,7 +47,7 @@
 
 1002. Start of program with turning cycles
 	lua_func_UnitsComment
-	// lua_func_ShowOperationData
+	lua_func_ShowOperationData
 	lua_func_ShowValueFromOperation("use_tool_number")
 	lua_func_formatNumber({num = 24.5, includeDotAfterInt = false})
 	lua_func_formatNumber({num = "MILL_GetXRapid", prefix = "X", numDecimalPlaces = 1 , includeDotAfterInt = false}) // Outputs: X2.3
