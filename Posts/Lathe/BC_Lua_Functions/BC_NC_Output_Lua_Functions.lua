@@ -345,8 +345,8 @@ end
     Convert a pitch value to threads per inch for the Lathe Thread Operation
     args:
         prefix: The prefix to be used in the threads per inch value
-        includeDotAfterInt: (Optional) (true or false) Whether to include a dot after the integer part of the value
         numDecimalPlaces: (Optional) The number of decimal places to round the threads per inch value to. Default is 4.
+        includeDotAfterInt: (Optional) (true or false) Whether to include a dot after the integer part of the value
     Returns:
         The threads per inch value with a prefix rounded to the nearest whole number
     Set in Post Processor:
@@ -361,7 +361,7 @@ end
         - includeDotAfterNum: to optionally add a dot after the integer part of the threads per inch value
 ]]
 threadsPerInchErrorMessageShown = false
-function ThreadsPerInch(prefix, includeDotAfterInt, numDecimalPlaces)
+function ThreadsPerInch(prefix, numDecimalPlaces, includeDotAfterInt)
 
     local pitch = GetValueFromOperation("thread_pitch")
 

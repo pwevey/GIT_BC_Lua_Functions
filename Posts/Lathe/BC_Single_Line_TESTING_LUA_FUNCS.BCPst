@@ -251,8 +251,8 @@
 	// lua_block_1
 	n,'G76',thread_x2,thread_z2,taper_height,thread_first_cut,thread_angle_in
 	lua_func_ThreadsPerInch("U") // Output: U20
-	lua_func_ThreadsPerInch("U", true) // Output: U20.
-	lua_func_ThreadsPerInch("U", true, 2) // Output: U18.52 (if 18.5185)
+	lua_func_ThreadsPerInch("U", 2, true) // Output: U20.
+	lua_func_ThreadsPerInch("U", 2) // Output: U18.52 (if 18.5185)
 
 1088. End of thread (G76) cycle
 
