@@ -1,0 +1,29 @@
+        
+************ CHECK BOXES ************
+CHECK_BOX,1,Use Tool Changer
+DEFAULT_CHECK,1,1
+        
+************ COMBO BOXES ************
+COMBO_BOX,1,Choice 1,Choice 2,Choice 3
+TEXT_LABEL,1,ComboBox Label 1
+DEFAULT_COMBO_INDEX,1,1
+        
+************ COMBO BOXES ************
+COMBO_BOX,3,Choice 1,Choice 2,Choice 3
+TEXT_LABEL,3,ComboBox Label 2
+DEFAULT_COMBO_INDEX,3,1
+
+************ EDIT BOXES ************
+EDIT_BOX,1,INTEGER
+TEXT_LABEL,1,Integer Edit Box
+DEFAULT_INTEGER,1,10
+
+************ EDIT BOXES ************
+EDIT_BOX,2,REAL
+TEXT_LABEL,2,Real Edit Box
+DEFAULT_REAL,2,1.230000
+
+************ EDIT BOXES ************
+EDIT_BOX,3,STRING
+TEXT_LABEL,3,String Edit Box
+DEFAULT_STRING,3,Default Text
