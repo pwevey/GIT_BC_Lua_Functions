@@ -71,46 +71,46 @@ end
 
 
 function FinalizeAdvPostingPage(args)
+    local function getCombinedString()
+        return table.concat(outputStrings)
+    end
+
     -- Concatenate all the strings in the outputStrings table
     local combinedString = getCombinedString()
     -- Bcc.ShowMessageBox("Final output: " .. combinedString)
 
+    local function writeToFile(content, postProcessorName, extension, jobType)
+        local fileName = postProcessorName
+        local baseFilePath = Bcc.GetDataFolder() .. "\\Posts\\"
+        jobType = string.lower(jobType)
+        -- Bcc.ShowMessageBox("jobType: " .. jobType .. "\nbaseFilePath: " .. baseFilePath .. "\nfileName: " .. fileName .. "\nextension: " .. extension .. "\ncontent: " .. content .. "\n")
+    
+        -- Append the jobType to the base file path
+        local jobTypePath
+        if jobType == "mill" then
+            jobTypePath = "Mill\\"
+        elseif jobType == "lathe" then
+            jobTypePath = "Lathe\\"
+        elseif jobType == "millturn" then
+            jobTypePath = "MillTurn\\"
+        else
+            Bcc.ShowMessageBox("Invalid jobType: " .. jobType)
+            return
+        end
+    
+        local filePath = baseFilePath .. jobTypePath .. fileName .. "." .. extension
+    
+        local file, err = io.open(filePath, "w")
+        if file then
+            file:write(content)
+            file:close()
+        else
+            Bcc.ShowMessageBox("Failed to open file: " .. filePath .. "\nError: " .. err)
+        end
+    end
+
     -- Write the output to a file
     writeToFile(combinedString, args.postProcessorName, args.extension, args.jobType)
-end
-
-function writeToFile(content, postProcessorName, extension, jobType)
-    local fileName = postProcessorName
-    local baseFilePath = Bcc.GetDataFolder() .. "\\Posts\\"
-    jobType = string.lower(jobType)
-    -- Bcc.ShowMessageBox("jobType: " .. jobType .. "\nbaseFilePath: " .. baseFilePath .. "\nfileName: " .. fileName .. "\nextension: " .. extension .. "\ncontent: " .. content .. "\n")
-
-    -- Append the jobType to the base file path
-    local jobTypePath
-    if jobType == "mill" then
-        jobTypePath = "Mill\\"
-    elseif jobType == "lathe" then
-        jobTypePath = "Lathe\\"
-    elseif jobType == "millturn" then
-        jobTypePath = "MillTurn\\"
-    else
-        Bcc.ShowMessageBox("Invalid jobType: " .. jobType)
-        return
-    end
-
-    local filePath = baseFilePath .. jobTypePath .. fileName .. "." .. extension
-
-    local file, err = io.open(filePath, "w")
-    if file then
-        file:write(content)
-        file:close()
-    else
-        Bcc.ShowMessageBox("Failed to open file: " .. filePath .. "\nError: " .. err)
-    end
-end
-
-function getCombinedString()
-    return table.concat(outputStrings)
 end
 
 
