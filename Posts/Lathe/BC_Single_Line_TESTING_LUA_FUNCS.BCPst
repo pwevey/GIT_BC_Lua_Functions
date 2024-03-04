@@ -23,6 +23,10 @@
 1000. Version Information = Version Month Day Year? "11.0 12 12 2016"
 
 0. File Header
+	lua_func_CreateRealEditBox({setPosition = 2, assignEditBoxLabel = "Real Edit Box", setDefaultDecimalNumber = 1.23})
+	lua_func_CreateStringEditBox({setPosition = 3, assignEditBoxLabel = "String Edit Box", setDefaultStringText = "Default Text"})
+	lua_func_FinalizeAdvPostingPage({postProcessorName = "BC_Single_Line_TESTING_LUA_FUNCS", extension = "CustomSettings", jobType = "Lathe"})
+
 	comment_start,"JOBSETUP[",prog_name_no_ext_no_path, force_no_add_spaces,".mwjs]JOBSETUP",comment_end
 	default_add_spaces
 	"O",prog_n

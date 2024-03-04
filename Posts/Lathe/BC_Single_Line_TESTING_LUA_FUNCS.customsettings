@@ -1,0 +1,10 @@
+************ EDIT BOX DECIMAL NUMBER ************
+EDIT_BOX,2,REAL
+TEXT_LABEL,2,Real Edit Box
+DEFAULT_REAL,2,1.230000
+
+************ EDIT BOX TEXT ************
+EDIT_BOX,3,STRING
+TEXT_LABEL,3,String Edit Box
+DEFAULT_STRING,3,Default Text
+
