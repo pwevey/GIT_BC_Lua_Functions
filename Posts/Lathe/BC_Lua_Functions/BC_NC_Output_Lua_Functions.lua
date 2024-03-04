@@ -34,7 +34,7 @@ end
     Format a number to a specified number of decimal places, with optional leading zero, thousands separator, and dot after integer.
     args: A table with the following keys:
         num: (required) The number to be formatted
-        numDecimalPlaces: The number of decimal places to round to. Default is round to nearest whole number.
+        numDecimalPlaces: The number of decimal places to round to. Default is rounded to 4 decimal places.
         multiply: (Optional) A multiplier to be applied to the number before formatting. Default is 1.
         add: (Optional) A value to be added to the number before formatting. Default is 0.
         subtract: (Optional) A value to be subtracted from the number before formatting. Default is 0.
@@ -76,7 +76,7 @@ function formatNumber(args)
         -- Bcc.ShowMessageBox("API num: "..num)
     end
 
-    local numDecimalPlaces = args.numDecimalPlaces or 0
+    local numDecimalPlaces = args.numDecimalPlaces or 4
     local useThousandsSeparator = args.useThousandsSeparator or false
     local multiplier = args.multiply or 1
     local add = args.add or 0
