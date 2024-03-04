@@ -1,3 +1,5 @@
+local outputStrings = {}
+
 local function createCheckBox(args)
     local codeBlock = [[
 ************ CHECK BOX ************
@@ -5,7 +7,8 @@ CHECK_BOX,%s,%s
 DEFAULT_CHECK,%s,%s
 
 ]]
-    return string.format(codeBlock, args.setPosition, args.assignCheckBoxLabel, args.setPosition, args.setDefaultToOnOff)
+    local str = string.format(codeBlock, args.setPosition, args.assignCheckBoxLabel, args.setPosition, args.setDefaultToOnOff)
+    table.insert(outputStrings, str)
 end
 
 
@@ -18,7 +21,8 @@ TEXT_LABEL,%s,%s
 DEFAULT_COMBO_INDEX,%s,%s
 
 ]]
-    return string.format(codeBlock, args.setPosition, choices, args.setPosition, args.assignComboBoxLabel, args.setPosition, args.setDefaultSelection)
+    local str = string.format(codeBlock, args.setPosition, choices, args.setPosition, args.assignComboBoxLabel, args.setPosition, args.setDefaultSelection)
+    table.insert(outputStrings, str)
 end
 
 
@@ -30,7 +34,8 @@ TEXT_LABEL,%d,%s
 DEFAULT_INTEGER,%d,%d
 
 ]]
-    return string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultIntegerNumber)
+    local str = string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultIntegerNumber)
+    table.insert(outputStrings, str)
 end
 
 
@@ -42,7 +47,8 @@ TEXT_LABEL,%d,%s
 DEFAULT_REAL,%d,%f
 
 ]]
-    return string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultDecimalNumber)
+    local str = string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultDecimalNumber)
+    table.insert(outputStrings, str)
 end
 
 
@@ -54,7 +60,8 @@ TEXT_LABEL,%d,%s
 DEFAULT_STRING,%d,%s
 
 ]]
-    return string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultStringText)
+    local str = string.format(codeBlock, args.setPosition, args.setPosition, args.assignEditBoxLabel, args.setPosition, args.setDefaultStringText)
+    table.insert(outputStrings, str)
 end
 
 
@@ -71,12 +78,16 @@ end
 
 
 
-local checkBoxString = createCheckBox({setPosition = 1, assignCheckBoxLabel = "Use Tool Changer", setDefaultToOnOff = 1})
-local comboBoxString1 = createComboBox({setPosition = 1, assignComboBoxLabel = "ComboBox Label 1", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
-local comboBoxString2 = createComboBox({setPosition = 3, assignComboBoxLabel = "ComboBox Label 2", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
-local integerEditBoxString = createIntegerEditBox({setPosition = 1, assignEditBoxLabel = "Integer Edit Box", setDefaultIntegerNumber = 10})
-local realEditBoxString = createRealEditBox({setPosition = 2, assignEditBoxLabel = "Real Edit Box", setDefaultDecimalNumber = 1.23})
-local stringEditBoxString = createStringEditBox({setPosition = 3, assignEditBoxLabel = "String Edit Box", setDefaultStringText = "Default Text"})
+-- Call the create functions
+createCheckBox({setPosition = 1, assignCheckBoxLabel = "Use Tool Changer", setDefaultToOnOff = 1})
+createComboBox({setPosition = 1, assignComboBoxLabel = "ComboBox Label 1", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
+createComboBox({setPosition = 3, assignComboBoxLabel = "ComboBox Label 2", setDefaultSelection = 1, assignChoiceLabels = {"Choice 1", "Choice 2", "Choice 3"}})
+createIntegerEditBox({setPosition = 1, assignEditBoxLabel = "Integer Edit Box", setDefaultIntegerNumber = 10})
+createRealEditBox({setPosition = 2, assignEditBoxLabel = "Real Edit Box", setDefaultDecimalNumber = 1.23})
+createStringEditBox({setPosition = 3, assignEditBoxLabel = "String Edit Box", setDefaultStringText = "Default Text"})
 
-local combinedString = checkBoxString .. comboBoxString1 .. comboBoxString2 .. integerEditBoxString .. realEditBoxString .. stringEditBoxString
+-- Concatenate all the strings in the outputStrings table
+local combinedString = table.concat(outputStrings)
+
+-- Write the output to a file
 writeToFile(combinedString, "customsettings")
