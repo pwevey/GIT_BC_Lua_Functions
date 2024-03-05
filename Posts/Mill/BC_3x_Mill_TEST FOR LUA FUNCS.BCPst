@@ -78,7 +78,7 @@
 	MDI_BeforeToolChange	
 	"(TOOL #",list_tool_number," ",tool_diameter," ",tool_label,")"
 	n,t,"M06"
-	lua_func_formatNumber({num = "MILL_GetToolNumber", prefix = "T", includeDotAfterInt = false, add = 100})
+	lua_func_formatNumber({num = "MILL_GetToolNumber", prefix = "T", includeDotAfterInt = false, add = 100}) // Output: T101
 	n,work_coord
 	output_primary_rotary_index
 	output_secondary_rotary_index
@@ -123,7 +123,7 @@
 	MDI_BeforeToolChange	
 	"(TOOL #",list_tool_number,tool_diameter,tool_label,")"
 	n,t,"M06"
-	lua_func_formatNumber({num = "MILL_GetToolNumber", prefix = "T", includeDotAfterInt = false, add = 100})
+	lua_func_formatNumber({num = "MILL_GetToolNumber", prefix = "T", includeDotAfterInt = false, add = 100}) // Output: T102
 	n,work_coord
 	n,work_plane
 	output_primary_rotary_index
