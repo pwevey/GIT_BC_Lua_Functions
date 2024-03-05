@@ -67,7 +67,7 @@
 999999. Hello Test
 	
 2. Start of file standard
-	n,rapid_move_forced, work_plane,, force_cancel_offset,"G49",work_coord,cancel_drill_cycle,measure_mode,absolute_coord
+	n,rapid_move_forced, work_plane, force_cancel_offset,"G49",work_coord,cancel_drill_cycle,measure_mode,absolute_coord
 	" "
 	"(FIRST CUT - FIRST TOOL)"
 	system_comment
@@ -78,6 +78,7 @@
 	MDI_BeforeToolChange	
 	"(TOOL #",list_tool_number," ",tool_diameter," ",tool_label,")"
 	n,t,"M06"
+	lua_func_formatNumber({num = "MILL_GetToolNumber", includeDotAfterInt = false, add = 100, prefix = "T"})
 	n,work_coord
 	output_primary_rotary_index
 	output_secondary_rotary_index
@@ -122,6 +123,7 @@
 	MDI_BeforeToolChange	
 	"(TOOL #",list_tool_number,tool_diameter,tool_label,")"
 	n,t,"M06"
+	lua_func_formatNumber({num = "MILL_GetToolNumber", includeDotAfterInt = false, add = 100, prefix = "T"})
 	n,work_coord
 	n,work_plane
 	output_primary_rotary_index
