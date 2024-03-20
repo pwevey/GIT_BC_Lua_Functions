@@ -387,6 +387,83 @@ end
 
 
 --[[
+    Outputs Groove Depth of Cut for a Lathe Groove Canned Cycle and outputs the value multiplied by 
+    1000 for inch units and 10000 for metric units
+    Returns:
+        The converted value with the specified prefix
+    Set in Post Processor:
+        lua_func_GrooveDepth("prefix")
+    Used for Post Blocks:
+        1074. Start of groove (G75) turning cycle
+        1078. Start of groove (G74) facing cycle
+    Dependencies:
+        - round: to round the value to the nearest whole number
+        - GetValueFromOperation: to get the depth of cut value from the operation
+]]
+function GrooveDepth(prefix)
+    local units = GetValueFromOperation("Unit") -- "inch" or "metric"
+    local depth_of_cut = GetValueFromOperation("depth_of_cut_or_stepover")
+
+    if units == "inch" then
+        return prefix .. round(depth_of_cut * 1000, 0)
+    elseif units == "metric" then
+        return prefix .. round(depth_of_cut * 10000, 0)
+    end
+end
+
+
+--[[
+    Outputs Groove Peck Increment for a Lathe Groove Canned Cycle and outputs the value multiplied by 
+    1000 for inch units and 10000 for metric units
+    Returns:
+        The converted value with the specified prefix
+    Set in Post Processor:
+        lua_func_GroovePeckIncrement("prefix")
+    Used for Post Blocks:
+        1074. Start of groove (G75) turning cycle
+        1078. Start of groove (G74) facing cycle
+    Dependencies:
+        - round: to round the value to the nearest whole number
+        - GetValueFromOperation: to get the Groove Peck Increment value from the operation
+]]
+function GroovePeckIncrement(prefix)
+    local units = GetValueFromOperation("Unit") -- "inch" or "metric"
+    local peck_increment = GetValueFromOperation("peck_increment")
+
+    if units == "inch" then
+        return prefix .. round(peck_increment * 1000, 0)
+    elseif units == "metric" then
+        return prefix .. round(peck_increment * 10000, 0)
+    end
+end
+
+
+--[[
+    Outputs Drill Peck Depth for a Lathe Peck Drill Canned Cycle and outputs the value multiplied by 
+    1000 for inch units and 10000 for metric units
+    Returns:
+        The converted value with the specified prefix
+    Set in Post Processor:
+        lua_func_DrillPeckIncrement("prefix")
+    Used for Post Blocks:
+        1126. Peck Drill Canned Cycle
+    Dependencies:
+        - round: to round the value to the nearest whole number
+        - GetValueFromOperation: to get the Drill Peck Depth value from the operation
+]]
+function DrillPeckIncrement(prefix)
+    local units = GetValueFromOperation("Unit") -- "inch" or "metric"
+    local peck_increment = BcPost.RunVBApi("LATHE_GetPeckIncrement")
+
+    if units == "inch" then
+        return prefix .. round(peck_increment * 1000, 0)
+    elseif units == "metric" then
+        return prefix .. round(peck_increment * 10000, 0)
+    end
+end
+
+
+--[[
     Outputs the Lathe arc move post block with I values converted from diameter to radius
     Returns:
         The whole post block for the Lathe Arc Move (Post Block: 1025) with I values converted from diameter to radius
@@ -497,4 +574,4 @@ function IfDwellOutput(prefix, includeDotAfterInt)
 end
 
 
---[[ MILL & FUNCTIONS ]]
+--[[ MILL FUNCTIONS ]]
