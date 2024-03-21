@@ -333,7 +333,7 @@ function GetValueFromOperation(searchKey)
         end
     end
 
-    Bcc.MessageBox("The operation_value used was found. Please use lua_func_ShowOperationData in a Post Block\n for the target Toolpath Operation to find out what 'operation_value' should be used.")
+    Bcc.MessageBox("The operation_value used was not found. Please use lua_func_ShowOperationData in a Post Block\n for the target Toolpath Operation to find out what 'operation_value' should be used.")
     return nil
 end
 
