@@ -82,6 +82,6 @@ function ShowValueFromOperation(searchKey)
     end
 
     -- If the key or subkey was not found, show an error message
-    Bcc.ShowMessageBox("Key or subkey not found", {Title="Error"})
+    Bcc.ShowMessageBox("The operation_value used was found. Please use lua_func_ShowOperationData in a Post Block\n for the target Toolpath Operation to find out what 'operation_value' should be used.", {Title="Error"})
 end
 
