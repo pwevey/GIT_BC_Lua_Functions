@@ -1,11 +1,15 @@
 --[[
-    ShowOperationData function
-    This function retrieves the current operations ID value of the Operation in the CAM Tree,
+    Function: ShowOperationData
+    Description: This function retrieves the current operations ID value of the Operation in the CAM Tree,
     iterates through the returned table and displays the key-value pairs in a message box.
-    Use ShowValueFromOperation function to extract the key or subkey you need to use
-    
-    functions in camelCase are general functions
-    functions in PascalCase contain BobCAD Lua API functions
+    Use ShowValueFromOperation function to show a singular key or subkey.
+    Revision History:
+        Version: 1.0 (2024-03-21)
+    Returns:
+        A message box containing the key-value pairs of the current operation.
+    Notes:
+        functions in camelCase are general functions
+        functions in PascalCase contain BobCAD Lua API functions
 ]]
 function ShowOperationData()
     -- Get the current operations ID value in the CAM Tree
@@ -38,11 +42,15 @@ end
 
 
 --[[
-    ShowValueFromOperation function
-    This function takes a searchKey as an argument, retrieves the current operations ID value in the CAM Tree,
+    Function: ShowValueFromOperation
+    Description: This function takes a searchKey as an argument, retrieves the current operations ID value in the CAM Tree,
     iterates through the returned table and returns the value of the key or subkey that matches the searchKey.
     If the key or subkey is not found, it returns nil.
     Use ShowOperationData function to find out to key you need to use
+    Revision History:
+        Version: 1.0 (2024-03-21)
+    Returns:
+        A message box containing the value of the key or subkey that matches the searchKey.
 ]]
 function ShowValueFromOperation(searchKey)
     -- Get the current operations ID value in the CAM Tree
