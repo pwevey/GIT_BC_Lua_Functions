@@ -4,7 +4,7 @@
     iterates through the returned table and displays the key-value pairs in a message box.
     Use ShowValueFromOperation function to show a singular key or subkey.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Returns:
         A message box containing the key-value pairs of the current operation.
     Notes:
@@ -48,7 +48,7 @@ end
     If the key or subkey is not found, it returns nil.
     Use ShowOperationData function to find out to key you need to use
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Returns:
         A message box containing the value of the key or subkey that matches the searchKey.
 ]]

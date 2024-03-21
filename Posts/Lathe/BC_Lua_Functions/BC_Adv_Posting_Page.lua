@@ -5,7 +5,7 @@ local outputStrings = {}
     Function: CreateCheckBox
     Description: Creates a Check Box on the Adv Posting Page set to a default value..
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args: A table with the following keys
         setPosition: An integer number that sets the location of the check box on the Adv Posting page. 
         Starting at Position 1 through 9
@@ -31,7 +31,7 @@ end
     Function: CreateComboBox
     Description: Creates a Combo Box on the Adv Posting Page set to a default value.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args: A table with the following keys:
         setPosition: An integer number that sets the location of the check box on the Adv Posting page. 
         Starting at Position 1 through 25. Positions 21 – 25 are wider.
@@ -62,7 +62,7 @@ end
     Function: CreateIntegerEditBox
     Description: Creates a Whole Number Edit Box on the Adv Posting Page set to a default value.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args: A table with the following keys
         setPosition: An integer number that sets the location of the check box on the Adv Posting page. 
         Starting at Position 1 through 25. Positions 21 – 25 are wider.
@@ -89,7 +89,7 @@ end
     Function: CreateRealEditBox
     Description: Creates a Real Edit Box on the Adv Posting Page set to a default value.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args: A table with the following keys
         setPosition: An integer number that sets the location of the check box on the Adv Posting page. 
         Starting at Position 1 through 25. Positions 21 – 25 are wider.
@@ -116,7 +116,7 @@ end
     Function: CreateStringEditBox
     Description: Creates a Real Edit Box on the Adv Posting Page set to a default value.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args: A table with the following keys
         setPosition: An integer number that sets the location of the check box on the Adv Posting page. 
         Starting at Position 1 through 25. Positions 21 – 25 are wider.
@@ -146,7 +146,7 @@ end
     IMPORTANT: This function is required for all post processors that utilize the Adv Posting Lua Functions. Place it at 
     the bottom of all the Create Adv Posting lua functions.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args: A table with the following keys
         postProcessorName: A string of the exact name of the post processor minus the extension.
         extension: A string of the extension for the Advanced Posting Custom file.

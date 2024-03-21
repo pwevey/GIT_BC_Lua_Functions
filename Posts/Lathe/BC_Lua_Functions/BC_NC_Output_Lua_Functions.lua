@@ -18,7 +18,7 @@
     Function: round
     Description: Round a number to a specified number of decimal places
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         num: The number to be rounded
         numDecimalPlaces: The number of decimal places to round to
@@ -40,7 +40,7 @@ end
     Description: Format a number to a specified number of decimal places, with optional leading zero, thousands separator, 
     and dot after integer.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args: A table with the following keys:
         num: (required) The number to be formatted
         numDecimalPlaces: The number of decimal places to round to. Default is rounded to 4 decimal places.
@@ -224,7 +224,7 @@ print(formatNumber({includeDotAfterInt = false})) -- Outputs: Error, no num para
     Function: convertAngle
     Description: Convert an angle between degrees and radians.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         angle: The angle to be converted
         mode: The conversion mode. Can be "degreesToRadians" or "radiansToDegrees".
@@ -267,7 +267,7 @@ print(degrees)
     Function: includeDotAfterNum
     Description: Include a dot after the integer numbers
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         num: The number to be formatted
         includeDotAfterInt: (true or false) Whether to include a dot after the integer part of the number
@@ -307,7 +307,7 @@ end
     Args:
         searchKey: The key to search for in the operation's parameters.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Returns:
         The value associated with the search key, or nil if the key is not found.
 
@@ -343,7 +343,7 @@ end
     Function: UnitsComment
     Description: Outputs a comment in the NC file with the units of the job.
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Returns:
         Outputs a comment in the NC file with the units of the job.
     Set in Post Processor:
@@ -369,7 +369,7 @@ end
     Function: ThreadsPerInch
     Description: Convert a pitch value to threads per inch for the Lathe Thread Operation
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         prefix: The prefix to be used in the threads per inch value
         numDecimalPlaces: (Optional) The number of decimal places to round the threads per inch value to. Default is 4.
@@ -418,7 +418,7 @@ end
     Description: Outputs Groove Depth of Cut for a Lathe Groove Canned Cycle and outputs the value multiplied by 
     1000 for inch units and 10000 for metric units
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         prefix: A string of the prefix to be used
     Returns:
@@ -449,7 +449,7 @@ end
     Description: Outputs Groove Peck Increment for a Lathe Groove Canned Cycle and outputs the value multiplied by 
     1000 for inch units and 10000 for metric units
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         prefix: A string of the prefix to be used
     Returns:
@@ -480,7 +480,7 @@ end
     Description: Outputs Drill Peck Depth for a Lathe Peck Drill Canned Cycle and outputs the value 
     multiplied by 1000 for inch units and 10000 for metric units
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         prefix: A string of the prefix to be used
     Returns:
@@ -509,7 +509,7 @@ end
     Function: RadiusIArcMoveBlock1025
     Description: Outputs the Lathe arc move post block with I values converted from diameter to radius
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Returns:
         The whole post block for the Lathe Arc Move (Post Block: 1025) with I values converted from diameter to radius
     Set in Post Processor:
@@ -533,7 +533,7 @@ end
     Function: ArcCenterXToRadius
     Description: Outputs the arc center I and K (Or other specified prefix) values for the Lathe Arc Move post block
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         prefixI: The prefix to be used in the I value
         prefixK: The prefix to be used in the K value
@@ -584,7 +584,7 @@ end
     Description: Check if a dwell exists and ouput with a prefix if it does This function is needed for 
     Peck Drilling cycles since they do not have a separate dwell post block
     Revision History:
-        Version: 1.0 (2024-03-21)
+        Version: 1.0 (2024-03-21) Author: Paul Wever
     Args:
         prefix: The prefix to be used in the dwell value
         includeDotAfterInt: (true or false) Whether to include a dot after the integer part of the value
