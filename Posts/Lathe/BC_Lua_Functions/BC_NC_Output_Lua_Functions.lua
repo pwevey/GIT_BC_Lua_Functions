@@ -52,6 +52,7 @@ end
         useThousandsSeparator: (Optional) Whether to include a thousands separator. Default is false.
         includeDotAfterInt: (Optional) Whether to include a dot after the integer part if the number is a whole number. Default is true.
         prefix: (Optional) A prefix to be added to the formatted number. (Primarily used for BobCAD API functions)
+        noOutputIfZero: (Optional) If true, the function will return nil if the number is 0. Default is false.
     returns:
         The formatted number as a string
     Example:
@@ -87,6 +88,7 @@ function formatNumber(args)
 
     local numDecimalPlaces = args.numDecimalPlaces or 4
     local useThousandsSeparator = args.useThousandsSeparator or false
+    local noOutputIfZero = args.noOutputIfZero or false
     local multiplier = args.multiply or 1
     local add = args.add or 0
     local subtract = args.subtract or 0
@@ -116,9 +118,18 @@ function formatNumber(args)
     local numStr = tostring(num)
 
     
-    -- Remove leading zero if necessary
-    if not includeLeadingZero and num > 0 and num < 1 then
-        numStr = numStr:sub(2)
+    -- If the number is 0 after rounding, set numStr to "0" directly
+    if num == 0 then
+        numStr = "0"
+        -- If noOutputIfZero is true, return nil
+        if noOutputIfZero then
+            return nil
+        end
+    else
+        -- Remove leading zero if necessary
+        if not includeLeadingZero and num > -1 and num < 0 then
+            numStr = "-" .. numStr:sub(3)
+        end
     end
 
     -- If the number is 0 after rounding, set numStr to "0" directly
