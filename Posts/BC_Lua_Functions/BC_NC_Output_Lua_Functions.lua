@@ -1,10 +1,4 @@
 --[[
-    TODO: Evaluate ThreadsPerInch(prefix) so that you can place the lua_func_ on the same line as of post variables
-            Link: https://bobcad.atlassian.net/servicedesk/customer/portal/3/BIT-864
-            TODO: Should automatically add spaces just before and after the return value of the functions
-]]
-
---[[
     The following functions are used throught out other functions
     in this file
     
