@@ -1,14 +1,4 @@
 --[[
-    The following functions are used throught out other functions
-    in this file
-    
-    functions in camelCase are general functions
-    functions in PascalCase contain BobCAD Lua API functions
-]]
-
-
-
---[[
     Function: round
     Description: Round a number to a specified number of decimal places
     Revision History:
