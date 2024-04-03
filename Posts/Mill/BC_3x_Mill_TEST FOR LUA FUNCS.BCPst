@@ -737,7 +737,7 @@
 730. Origin tracking on Code? "G254"
 731. Origin tracking off Code? "G255"
 
-732. Lua sub folder? "BC_Lua_Functions"
+732. Lua sub folder? "../BC_Lua_Functions"
 
 750. Laser-Plasma-Waterjet Cutter Width Prefix? 
 751. Laser-Plasma-Waterjet Pierce Height Z Location Prefix? 

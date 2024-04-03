@@ -945,7 +945,7 @@ user_comment_8
 
 729. Feed Mode UPR Code? "G99"							// Shared Mill & Lathe
 
-732. Lua sub folder? "BC_Lua_Functions"
+732. Lua sub folder? "../BC_Lua_Functions"
 
 733. Prefix for Helix Total Angle (helix_totalangles)? "PA"
 734. Prefix for Helix Pitch (helix_pitch)? "KP"

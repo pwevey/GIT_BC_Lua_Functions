@@ -28,23 +28,21 @@ To use these lua functions, do the following:
 
     [Registry Key to Enable](https://bobcad.com/components/webhelp/BC_Lua/RegistryKeytoEnable.html)
 
-2. Make a folder in one of the following directories to store the lua files
+2. Make a folder in one of the following directory to store the lua files
 
-    MILL: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Mill
-
-    LATHE: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe
-
-    MILLTURN: C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\MillTurn
+    C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts
 
     eg. create a folder called, "BC_Lua_Functions" 
 
 3. Place the Lua files from this Github repository in the newly created local folder
 
-    eg. place in C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\Lathe\BC_Lua_Functions
+    eg. place in C:\BobCAD-CAM Data\BobCAD-CAM V36\Posts\BC_Lua_Functions
 
 4. Add the following Post Question to your Post Processor and use the name of the folder you just created
 
-    732\. Lua sub folder? "BC_Lua_Functions" 
+    732\. Lua sub folder? "../BC_Lua_Functions" 
+
+    Note: Make sure to add "../" since this is a relative file path and the folder was created back one in the file directory.
 
 5. You can now use the lua functions through out the Post Processor. 
 
