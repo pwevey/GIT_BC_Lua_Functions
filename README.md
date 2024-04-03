@@ -19,6 +19,9 @@ Test Post Processors
 - BC_Lua_Functions.lua: This file contains Lua functions for retrieving and displaying operation data from the CAM system. 
 It is the main lua file used in all machine types to find and 
 display data from the software such as data from any operation.
+- BC_NC_Output_Lua_Functions.lua: This file contains functions that are used to manipulate the output of the NC file.
+These functions are primarily used directly in a standard post block and called like: lua_func_formatNumber({num = "MILL_Get_SRot", prefix = "A"}).
+However, there are also functions like round() that can be used in lua blocks 2701 - 2799 like: local threads_per_inch = "E" .. round(1 / pitch, 0) 
 
 ## Usage
 
