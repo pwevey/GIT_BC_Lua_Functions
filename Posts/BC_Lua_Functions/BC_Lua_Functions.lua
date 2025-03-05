@@ -85,3 +85,37 @@ function ShowValueFromOperation(searchKey)
     Bcc.ShowMessageBox("The operation_value used was not found. Please use lua_func_ShowOperationData in a Post Block\n for the target Toolpath Operation to find out what 'operation_value' should be used.", {Title="Error"})
 end
 
+
+--[[
+    Function: ShowBasicMessageBox
+    Description: Display a basic message box with a user created message.
+    Revision History:
+        Version: 1.0 (2025-03-05) Author: Paul Wever
+    Args:
+        message: (required) A string to be displayed in the message box.
+    Returns:
+        A message box containing the input message string.
+]]
+function ShowBasicMessageBox(message)
+
+    Bcc.ShowMessageBox(message, {Title="BobCAD-CAM Basic Message Box", ButtonType="OK", ImageType="Information"})
+
+end
+
+
+--[[
+    Function: AddNCComment
+    Description: Output a user defined comment to the NC file.
+    Revision History:
+        Version: 1.0 (2025-03-05) Author: Paul Wever
+    Args:
+        message: (required) A string to be displayed as a comment in the NC file.
+    Returns:
+        A comment in the posted NC file.
+]]
+
+function AddNCComment(comment)
+
+    BcPost.ProcessPostLine("comment_start,'"..comment.."',comment_end")
+    
+end
